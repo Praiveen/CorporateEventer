@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-public class Participant {
+public class EventParticipant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
