@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initialscale=1.0">
+    <title>Iron World - Главная</title>
+    <link rel="icon" type="image/svg+xml" href="pict/video_card.svg">
+    <link rel="icon" href="pict/video_card.ico" sizes="any">
+    <link rel="icon" type="image/png" href="pict/video_card.png">
+    <!-- <link rel="stylesheet" type="text/css" href="css/reset.css"> -->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Caption&display=swap" rel="stylesheet">
+ </head>
+ <body id="Topic1">
+    <div class="feedback">
+        <div>
+            <a href="#Topic1">
+                <img src="pict/circle-arrow-up-svgrepo-com.svg">
+
+            </a>
+        </div>
+    </div>
+    <header th:replace = "~{header :: header}"></header>
+    <aside class="panel">
+        <li class="menu-item-main"><a href="#">Комлектущие</a>
+            <ul class="navigation">
+                <li class="menu-item"><a href="motherboard_store">Материнские платы</a></li>
+                <li class="menu-item"><a href="gpu_store">Видеокарты</a></li>
+                <li class="menu-item"><a href="cpu_store">Процессоры</a></li>
+                <li class="menu-item"><a href="ram_store">Оперативная память</a></li>
+                <li class="menu-item"><a href="rom_store">Хранение данных</a></li>
+                <li class="menu-item"><a href="cooler_store">Охлаждение</a></li>
+                <li class="menu-item"><a href="case_store">Корпуса</a></li>
+                <li class="menu-item"><a href="power_store">Блоки питания</a></li>
+            </ul>
+        </li>
+    </aside>
+    <main class="base-container">
+        <article>
+            </p>
+            <section class="window-tabs">
+                <div class="window-1">
+                    <div>
+                        <h1>Магазин комплектущих</h1>
+                        <p>Выбери себе лучшее железо, по нужным требованиям!</p>
+                    </div>
+                    <a href="gpu_store" class="animated-button">ТЫК</a>
+                </div>
+                <div class="window-2">
+                    <h1>Личный кабинет</h1>
+                    <p>Войдите, чтобы получить доступ к магазину</p>
+                </div>
+                <div class="window-4">
+                    <a href="#Topic2">
+                        <h1>Мы в соц сетях!</h1>
+                        <p>Вступайте к нам в группу и узнавайте первыми все акции и предложения!</p>
+                    </a>
+                </div>
+            </section>
+            <section class="first-block">
+                <h4>Новости</h4>
+            </section>
+            <section  class="news">
+                <div>
+                    <div class="main-news">
+                        <a href="news_page1">
+                        Обзор Core i9-14900K: даёшь 6 ГГц!</a>
+                    </div>
+                    <div class="forLeft">
+                        <img src="pict/news_page1/page1_prev.png">
+                    </div>
+                    <p class="textContainer">В декабре Intel выпустит долгожданные процессоры Meteor Lake, которые откроют новую эру в истории Core. Но десктопы останутся без революционных обновлений: для них компания подготовила Raptor Lake Refresh. И это самые неоднозначные процессоры последнего времени, особенно если говорить о флагмане Core i9-14900K</p>
+                </div>
+            </section>
+
+            <section class="news">
+                <div>
+                    <div class="main-news">
+                        <a href="news_page2">Обзор и тестирование видеокарты ASUS TUF Gaming GeForce RTX 4090</a>
+                    </div>
+                    <div class="forLeft">
+                        <img src="pict/news_page2/prev2.png">
+                    </div>
+                    <p class="textContainer">Перед нами просто хорошая видеокарта, сделанная по канону и основанная на флагманском графическом процессоре. Видеокарты компании NVIDIA последнего поколения были анонсированы ещё год назад, и за это время вышло много обзоров, разборов и разоблачений. После изучения всей линейки мне показались интересными только три графических процессора: RTX 4090</p>
+                </div>
+            </section>
+            <section class="news">
+                <div>
+                    <div class="main-news">
+                        <a href="news_page3">Обзор и тест AMD Ryzen 5 7500F: самый дешёвый Zen 4</a>
+                    </div>
+                    <div class="forLeft">
+                        <img src="pict/news_page3/prev3.png">
+                    </div>
+                    <p class="textContainer">Сборка компьютера на Socket AM5 становится доступнее — AMD выпустила шестиядерник за 15 000 рублей. Причём на этот раз компания постаралась и сделала такой CPU, который оттеснил Core i5-12400 и Core i5-13400F и сразу стал лучшим в своём ценовом сегменте</p>
+                </div>
+            </section>
+            <section class="news">
+                <div>
+                    <div class="main-news">
+                        <a href="news_page4">Обзор Adata Legend 970 1 Тбайт: PCIe 5.0-накопитель с моторчиком</a>
+                    </div>
+                    <div class="forLeft">
+                        <img src="pict/news_page4/prev4.png">
+                    </div>
+                    <p  class="textContainer">Adata Legend 970 — не совсем типовой накопитель на PCIe 5.0-контроллере Phison E26. Он оснащён активным кулером, выделяющим его на фоне конкурентов. Мы проверили, как этот кулер ведёт себя на практике, а заодно сравнили производительность Legend 970 и PCIe 4.0-флагманов</p>
+                </div>
+            </section>
+            <section class="news">
+                <div>
+                    <div class="main-news">
+                        <a href="news_page5">Обзор и тестирование материнской платы MSI MEG Z790 Godlike</a>
+                    </div>
+                    <div class="forLeft">
+                        <img src="pict/news_page5/prev5.png">
+                    </div>
+                    <p class="textContainer">В очередной раз компания MSI демонстрирует свои достижения в области производства системных плат, предлагая флагманскую модель со всей возможной функциональностью.</p>
+                </div>
+            </section>
+            <section class="news">
+                <div>
+                    <div class="main-news">
+                        <a href="news_page6">Обзор блока питания 1STPLAYER NGDP HA-1000BA3: белая роскошь</a>
+                    </div>
+                    <div class="forLeft">
+                        <img src="pict/news_page6/prev6.png">
+                    </div>
+                    <p class="textContainer">NGDP — дорогие блоки питания, построенные на фирменной аппаратной платформе. Но свою цену они полностью отрабатывают сертификацией 80 PLUS Platinum, массой разъемов и кабелями в оплетке под цвет корпуса</p>
+                </div>
+            </section>
+            <section class="news">
+                <div>
+                    <div class="main-news">
+                        <a href="news_page7">Правда ли, что 64-Гбайт комплекты DDR5 быстрее 32-Гбайт? Проверяем Patriot Viper Venom DDR5-6400 2×32 Гбайт</a>
+                    </div>
+                    <div class="forLeft">
+                        <img src="pict/news_page7/prev7.png">
+                    </div>
+                    <p class="textContainer">Модули DDR5 объёмом 32 Гбайт, в отличие от 16-Гбайт собратьев, имеют двухранговую архитектуру. Но как это сказывается на производительности? Разбираемся, сравнивая между собой идентичные по характеристикам комплекты DDR5-6400 объёмом 32 и 64 Гбайт</p>
+                </div>
+            </section>
+        </article>
+    </main>
+    <footer th:replace = "~{footer :: footer}"></footer>
+ </body>
+
+<script src="java/main.js"></script>
+<script src="java/tab.js"></script>
+<script src="java/user_enter.js"></script>
+<script src="java/UserReg.js"></script>
+</html>

@@ -16,11 +16,19 @@ public class Department {
 
     private String departmentName;
 
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+
     @OneToOne
     @JoinColumn(name = "manager_id")
     private User manager;
 
     @OneToMany(mappedBy = "department")
+    private List<SubDepartment> subDepartments;
+
+    @OneToMany(mappedBy = "department")
     private List<User> users;
 }
+
 

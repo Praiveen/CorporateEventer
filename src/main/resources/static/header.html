@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
+<body>
+<header th:fragment="header">
+    <nav>
+        <div class="nav">
+            <div class="nav-tel">
+                <img src="pict/video_card.svg" alt="Логотип" />
+            </div>
+            <input id="menu-toggle" type="checkbox" />
+            <label class='menu-button-container' for="menu-toggle">
+                <div class="all-menu-button">
+                    <div class='menu-button'></div>
+                </div>
+            </label>
+            <div class="nav-menu">
+                <a href="index">Главная</a>
+                <a href="pc_recomendation">Лучшие сборки</a>
+                <a href="about">О сайте</a>
+            </div>
+        </div>
+    </nav>
+</header>
+</body>
+</html>

@@ -19,6 +19,7 @@ public class Meeting {
     private String agenda;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "organizer_id")

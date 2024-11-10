@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<footer th:fragment="footer">
+    <div class="grid-foot" id="Topic2">
+        <div class="block-foot">
+            <h1>О нас</h1>
+            <p>Мы - команда людей, увлеченных своим делом. Мы ежедневно пишем новые статьи для вас, собираем различную информацию о комлектущих и публикуем только полезные сведения, которые помогат вам в различных аспектах. Читайте нас также в соц сетях!</p>
+            <div class="foot-contacts">
+                <div class="media-contact">
+                    <a href="https://t.me/+sNJX3hSNj0c0YjNi">
+                        <img src="pict/tg.svg" alt="">
+                    </a>
+                </div>
+                <div class="media-contact">
+                    <a href="">
+                        <img src="pict/vk.png" alt="">
+                    </a>
+                </div>
+                <div class="media-contact">
+                    <a href="">
+                        <img src="pict/yt.svg" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="block-foot">
+            <div class="other-pages">
+                <h1>Страницы</h1>
+                <ul>
+                    <li><a href="index">Главная</a></li>
+                    <li><a href="pc_recomendation">Лучшие сборки</a></li>
+                    <li><a href="about">О сайте</a></li>
+                    <li><a sec:authorize="!isAuthenticated()" href="login">Войти</a></li>
+                    <li><a sec:authorize="isAuthenticated()" href="user_page">Личный кабинет</a></li>
+                    <li><a sec:authorize="hasRole('ADMIN')" href="admin">Панель админ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="block-foot">
+            <div class="other-pages">
+                <h1>Комплектующие</h1>
+                <ul>
+                    <li class="menu-item"><a href="motherboard_store">Материнские платы</a></li>
+                    <li class="menu-item"><a href="gpu_store">Видеокарты</a></li>
+                    <li class="menu-item"><a href="cpu_store">Процессоры</a></li>
+                    <li class="menu-item"><a href="ram_store">Оперативная память</a></li>
+                    <li class="menu-item"><a href="rom_store">Хранение данных</a></li>
+                    <li class="menu-item"><a href="cooler_store">Охлаждение</a></li>
+                    <li class="menu-item"><a href="case_store">Корпуса</a></li>
+                    <li class="menu-item"><a href="power_store">Блоки питания</a></li>
+                </ul>
+
+            </div>
+        </div>
+        <div class="block-foot">
+            <div class="other-pages">
+                <h1>Контакты</h1>
+                <div class="inline-tel">
+                    <img src="pict/phone-svgrepo-com.svg">
+                    <a href=”tel:+79998887766”>+7(999)888-77-66</a>
+                </div>
+                <div class="inline-tel">
+                    <img src="pict/location-pin-alt-svgrepo-com.svg">
+                    <a href="#">Вернадка 78</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="copyright">
+        <p>© Iron World, Карагачев Иван ИКБО-36-22, Все права защищены 2023</p>
+    </div>
+</footer>
+</body>
+</html>

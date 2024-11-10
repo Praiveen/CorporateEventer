@@ -2,25 +2,23 @@ package com.example.CorporateEventer.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 import jakarta.persistence.*;
 
 @Data
 @NoArgsConstructor
 @Entity
-public class EventParticipant {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long roleId;
 
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
+    private String roleName;
+    private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    private String status;
+    @ManyToMany(mappedBy = "roles")
+    private List<User> users;
 }
 

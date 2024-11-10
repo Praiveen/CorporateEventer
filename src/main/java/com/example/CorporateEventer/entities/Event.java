@@ -20,6 +20,7 @@ public class Event {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String location;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "created_by")
