@@ -17,6 +17,10 @@ public class Company {
     private String companyName;
     private String address;
 
+    @OneToOne
+    @JoinColumn(name = "director_id")
+    private User director;
+
     @OneToMany(mappedBy = "company")
     private List<Department> departments;
 }

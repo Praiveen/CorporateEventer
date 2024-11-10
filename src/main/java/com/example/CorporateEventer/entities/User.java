@@ -35,6 +35,10 @@ public class User {
     @JoinColumn(name = "subdepartment_id", nullable = true)
     private SubDepartment subDepartment;
 
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = true)
+    private Company company;
+
     @ManyToMany
     @JoinTable(
         name = "user_roles",

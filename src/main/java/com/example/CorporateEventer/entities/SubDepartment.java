@@ -20,6 +20,10 @@ public class SubDepartment {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @OneToOne
+    @JoinColumn(name = "manager_id")
+    private User manager;
+
     @OneToMany(mappedBy = "subDepartment")
     private List<User> users;
 }
