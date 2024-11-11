@@ -23,5 +23,8 @@ public class Company {
 
     @OneToMany(mappedBy = "company")
     private List<Department> departments;
+
+    @OneToMany(mappedBy = "company")
+    private List<User> users;
 }
 

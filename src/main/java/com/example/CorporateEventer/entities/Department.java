@@ -27,8 +27,8 @@ public class Department {
     @OneToMany(mappedBy = "department")
     private List<SubDepartment> subDepartments;
 
-    // @OneToMany(mappedBy = "department")
-    // private List<User> users;
+    @OneToMany(mappedBy = "department")
+    private List<User> users;
 }
 
 
