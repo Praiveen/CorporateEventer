@@ -2,6 +2,8 @@ package com.example.CorporateEventer.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class PageController {
@@ -16,6 +18,12 @@ public class PageController {
     public String index2() {
         return "index";
     }
+
+    @GetMapping("/users/me")
+    public String info() {
+        return "info";
+    }
+    
 
 
 }
