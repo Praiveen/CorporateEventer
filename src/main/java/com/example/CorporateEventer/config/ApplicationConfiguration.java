@@ -1,8 +1,6 @@
 package com.example.CorporateEventer.config;
 
-
-
-import com.example.CorporateEventer.repositories.UserRepository;
+import com.example.CorporateEventer.repositories.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,9 +21,8 @@ public class ApplicationConfiguration {
 
     @Bean
     UserDetailsService userDetailsService() {
-        // return username -> userRepository.findByEmail(username)
-        //         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return username -> userRepository.findByEmail(username);
+        return username -> userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean
@@ -48,3 +45,4 @@ public class ApplicationConfiguration {
         return authProvider;
     }
 }
+

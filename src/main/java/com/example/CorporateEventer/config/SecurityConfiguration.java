@@ -1,4 +1,4 @@
-package com.example.CorporateEventer.security;
+package com.example.CorporateEventer.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +11,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import com.example.CorporateEventer.config.JwtAuthenticationFilter;
 
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/auth/**")
                 .permitAll()
                 .anyRequest()
-                .anonymous()
+                .authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -55,11 +53,11 @@ public class SecurityConfiguration {
 
         // configuration.setAllowedOrigins(List.of("http://localhost:8005"));
         configuration.setAllowedMethods(List.of("GET","POST"));
-        // configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        // source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration("/**",configuration);
 
         return source;
     }

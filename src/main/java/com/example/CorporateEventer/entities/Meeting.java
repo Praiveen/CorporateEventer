@@ -21,20 +21,20 @@ public class Meeting {
     private LocalDateTime endTime;
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "organizer_id")
-    private User organizer;
+    // @ManyToOne
+    // @JoinColumn(name = "organizer_id")
+    // private User organizer;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @ManyToMany
-    @JoinTable(
-        name = "meeting_participants",
-        joinColumns = @JoinColumn(name = "meeting_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> participants;
+    // @ManyToMany
+    // @JoinTable(
+    //     name = "meeting_participants",
+    //     joinColumns = @JoinColumn(name = "meeting_id"),
+    //     inverseJoinColumns = @JoinColumn(name = "user_id")
+    // )
+    // private List<User> participants;
 }
 

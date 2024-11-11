@@ -1,7 +1,7 @@
 package com.example.CorporateEventer.config;
 
+import com.example.CorporateEventer.services.*;
 
-import com.example.CorporateEventer.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

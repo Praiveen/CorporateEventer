@@ -1,40 +1,25 @@
 package com.example.CorporateEventer.services;
 
-import com.example.CorporateEventer.entities.User;
-import com.example.CorporateEventer.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.CorporateEventer.entities.*;
+import com.example.CorporateEventer.repositories.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
+    public List<User> allUsers() {
+        List<User> users = new ArrayList<>();
 
-    public User save(User user) {
-        return userRepository.save(user);
-    }
+        userRepository.findAll().forEach(users::add);
 
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+        return users;
     }
-
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-} 
+}
