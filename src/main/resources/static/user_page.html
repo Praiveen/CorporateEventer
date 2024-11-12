@@ -65,9 +65,7 @@
         try {
             const response = await fetch('/users/me', {
                 method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token') // Предполагается, что токен хранится в localStorage
-                }
+                credentials: 'include', // Убедитесь, что куки отправляются с запросом
             });
 
             if (!response.ok) {
@@ -84,6 +82,13 @@
             console.error(error);
             alert('Не удалось загрузить информацию о пользователе');
         }
+    }
+
+    // Функция для получения значения куки по имени
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
     // Вызов функции при загрузке страницы

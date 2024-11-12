@@ -18,6 +18,22 @@ public class PageController {
     public String index2() {
         return "index";
     }
+
+    @GetMapping("/register")
+    public String registration() {
+        return "register";
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "login";
+    }
+
+    @GetMapping("/user_page")
+    public String userPageLoader() {
+        return "user_page";
+    }
+
     
 
 

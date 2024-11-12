@@ -49,13 +49,13 @@ public class User implements UserDetails {
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name = "user_roles",
+        name = "user_companyroles",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles; 
+    private List<CompanyRole> companyRoles; 
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")

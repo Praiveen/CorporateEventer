@@ -27,31 +27,42 @@
     </div>
 </div>
 <header th:replace = "~{header :: header}"></header>
+<aside class="panel">
+    <li th:replace = "~{navigation :: navigation}"></li>
+</aside>
 <main class="gallery-transform">
     <article>
         <div>
             <div class="modal-container">
                 <div class="modal-block">
-                    <form action="/login" method="post" class="modal-form">
-                        <h1>Вход</h1>
-                        <div th:if="${param.error}" class="alert">
-                            <h1>Неверная почта или пароль!</h1>
+                    <form action="/regSave" method="post" th:object="${userReg}" class="modal-form">
+                        <h1>Регистрация</h1>
+                        <div th:if="${Message}" class="alert">
+                            <h1 th:text="${Message}"></h1>
+                        </div>
+                        <div th:if="${RegFull}" class="">
+                            <h1 th:text="${RegFull}"></h1>
                         </div>
                         <div>
-                            <input id="email" name="email"  type="email" placeholder="Введите почту" />
+                            <input type="email" id="email" name="email" required placeholder="Введите почту" />
                         </div>
                         <div>
-                            <input id="password" name="password" type="password"  placeholder="Введите пароль">
+                            <input type="text" id="username" name="username" required placeholder="Введите никнейм" />
+                        </div>
+                        <div>
+                            <p>Пароль должен содержать минимум 5 символов</p>
+                            <input type="password" id="password" name="password" required placeholder="Введите пароль">
+                        </div>
+                        <div>
+                            <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Подтвердите пароль">
                         </div>
                         <div style="display: flow">
-                            <button id="enterButton">Войти</button>
+                            <button id="regButton">Зарегестрироваться</button>
                         </div>
                     </form>
-                    <div class="register-form">
-                        <p>Нет учетной записи?</p>
-                        <a href="/register">
-                            <button>Зарегистрироваться</button>
-                        </a>
+                    <div class="modalFormSpecial">
+                        <p>Уже есть аккаунт?</p>
+                        <a href="/login"><button class="buttonSpecial">Войти</button></a>
                     </div>
 
                 </div>
@@ -64,5 +75,5 @@
 
 <script src="java/main.js"></script>
 <script src="java/tab.js"></script>
-<script src="java/enter.js"></script>
+<script src="java/user_enter.js"></script>
 </html>
