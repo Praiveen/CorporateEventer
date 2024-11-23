@@ -1,0 +1,121 @@
+<!-- <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initialscale=1.0">
+    <title>Iron World - Личный кабинет</title>
+    <link rel="icon" type="image/svg+xml" href="pict/video_card.svg">
+    <link rel="icon" href="pict/video_card.ico" sizes="any">
+    <link rel="icon" type="image/png" href="pict/video_card.png">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Caption&display=swap" rel="stylesheet">
+</head>
+<body onload="ttxUser()" id="Topic1">
+<div class="feedback">
+    <div>
+        <a href="#Topic1">
+            <img src="pict/circle-arrow-up-svgrepo-com.svg">
+
+        </a>
+    </div>
+</div>
+<header th:replace = "~{header :: header}"></header>
+<main class="gallery-transform">
+    <article>
+        <div>
+            <div class="modal-container">
+                <div class="modal-block">
+                    <form action="/login" method="post" class="modal-form">
+                        <h1>Вход</h1>
+                        <div th:if="${param.error}" class="alert">
+                            <h1>Неверная почта или пароль!</h1>
+                        </div>
+                        <div>
+                            <input id="email" name="email"  type="email" placeholder="Введите почту" />
+                        </div>
+                        <div>
+                            <input id="password" name="password" type="password"  placeholder="Введите пароль">
+                        </div>
+                        <div style="display: flow">
+                            <button id="enterButton">Войти</button>
+                        </div>
+                    </form>
+                    <div class="register-form">
+                        <p>Нет учетной записи?</p>
+                        <a href="/register">
+                            <button>Зарегистрироваться</button>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </article>
+</main>
+<footer th:replace = "~{footer :: footer}"></footer>
+</body>
+<script src="java/enter.js"></script>
+</html> -->
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initialscale=1.0">
+    <header th:replace="~{links}"></header> 
+
+    <title>CorpoEventer - Главная</title>
+ </head>
+ <body id="Topic1">
+    <!-- <div class="feedback">
+        <div>
+            <a href="#Topic1">
+                <img src="pict/circle-arrow-up-svgrepo-com.svg">
+            </a>
+        </div>
+    </div> -->
+    <header th:replace = "~{headerStarterPage}"></header>
+    
+    <main class="contentMainPage">
+        <article>
+            <section>
+                <div class="modal-container">
+                    <div class="modal-block">
+                        <form action="/login" method="post" class="modal-form">
+                            <h1>Вход</h1>
+                            <div th:if="${param.error}" class="alert">
+                                <h1>Неверная почта или пароль!</h1>
+                            </div>
+                            <div>
+                                <input id="email" name="email"  type="email" placeholder="Введите почту" />
+                            </div>
+                            <div>
+                                <input id="password" name="password" type="password"  placeholder="Введите пароль">
+                            </div>
+                            <div style="display: flow">
+                                <button id="enterButton">Войти</button>
+                            </div>
+                        </form>
+                        <div class="register-form">
+                            <p>Нет учетной записи?</p>
+                            <a href="/register">
+                                <button>Зарегистрироваться</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+        </article>
+    </main>
+    <footer th:replace = "~{footer}"></footer>
+ </body>
+ <script src="java/enter.js"></script>
+</html>

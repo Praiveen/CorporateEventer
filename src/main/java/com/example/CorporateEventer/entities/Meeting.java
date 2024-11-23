@@ -30,11 +30,6 @@ public class Meeting {
     private Room room;
 
     @ManyToMany
-    @JoinTable(
-        name = "meeting_participants",
-        joinColumns = @JoinColumn(name = "meeting_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
     private List<User> participants;
 }
 

@@ -2,7 +2,7 @@
     <nav>
         <div class="nav">
             <div class="nav-tel">
-                <img src="pict/video_card.svg" alt="Логотип" />
+                <a href="/">CorpoEventer</a>
             </div>
             <input id="menu-toggle" type="checkbox" />
             <label class='menu-button-container' for="menu-toggle">
@@ -11,10 +11,8 @@
                 </div>
             </label>
             <div class="nav-menu">
-                <a href="/">Главная</a>
-                <a href="/about">О сайте</a>
-                <a sec:authorize="!isAuthenticated()" href="login">Войти</a>
-                <a sec:authorize="isAuthenticated()" href="user_page">Личный кабинет</a>
+                <a href="/login">Войти</a>
+                <a href="/register">Зарегестрироваться</a>
             </div>
         </div>
     </nav>

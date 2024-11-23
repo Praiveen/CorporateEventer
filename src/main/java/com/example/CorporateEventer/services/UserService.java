@@ -1,24 +1,30 @@
 package com.example.CorporateEventer.services;
 
-import com.example.CorporateEventer.entities.User;
-import com.example.CorporateEventer.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.CorporateEventer.entities.*;
+import com.example.CorporateEventer.repositories.*;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public Optional<User> findById(Long id) {
+    public Optional<User> findByEmail(String username) {
+        return userRepository.findByEmail(username);
+    }
+
+    public Optional<User> findById(int id) {
         return userRepository.findById(id);
     }
 
@@ -26,15 +32,25 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public List<User> allUsers() {
+        List<User> users = new ArrayList<>();
+
+        userRepository.findAll().forEach(users::add);
+
+        return users;
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Long getUserIdFromSecurity() {
+        Authentication authentication = userInfoFromSecurity();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return ((User) userDetails).getUserId();
+        }
+        return null;
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Authentication userInfoFromSecurity(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication;
     }
-} 
+}

@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -17,11 +19,17 @@ public class Company {
     private String companyName;
     private String address;
 
-    @OneToOne
+    @OneToMany(mappedBy = "company")
+    private List<Notification> notifications;
+
     @JoinColumn(name = "director_id")
-    private User director;
+    private Long director;
 
     @OneToMany(mappedBy = "company")
     private List<Department> departments;
+
+    @OneToMany(mappedBy = "company")
+    @JsonManagedReference("company-users")
+    private List<User> users;
 }
 

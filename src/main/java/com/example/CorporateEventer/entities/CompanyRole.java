@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-public class Role {
+public class CompanyRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class Role {
     private String roleName;
     private String description;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "companyRoles")
     private List<User> users;
 }
 
