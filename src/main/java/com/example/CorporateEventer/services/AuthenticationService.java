@@ -1,13 +1,10 @@
 package com.example.CorporateEventer.services;
 
-// import com.tericcabrel.authapi.dtos.LoginUserDto;
-// import com.tericcabrel.authapi.dtos.RegisterUserDto;
-// import com.tericcabrel.authapi.entities.User;
-// import com.tericcabrel.authapi.repositories.UserRepository;
-
-
+import com.example.CorporateEventer.dto.LoginUserDto;
+import com.example.CorporateEventer.dto.RegisterUserDto;
 import com.example.CorporateEventer.entities.*;
 import com.example.CorporateEventer.repositories.*;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +15,7 @@ import java.util.List;
 
 @Service
 public class AuthenticationService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -35,6 +33,8 @@ public class AuthenticationService {
     public User signup(RegisterUserDto input) {
         var user = new User()
             .setFullName(input.getFullName())
+            .setFirstName(input.getFirstName())
+            .setLastName(input.getLastName())
             .setEmail(input.getEmail())
             .setPassword(passwordEncoder.encode(input.getPassword()));
 
@@ -52,11 +52,10 @@ public class AuthenticationService {
         return userRepository.findByEmail(input.getEmail()).orElseThrow();
     }
 
-    public List<User> allUsers() {
-        List<User> users = new ArrayList<>();
-
-        userRepository.findAll().forEach(users::add);
-
-        return users;
+    public boolean saveUser(RegisterUserDto registerUserDto) {
+        if (userRepository.findByEmail(registerUserDto.getEmail()).isPresent()) {
+            return false;
+        }
+        return true;
     }
 }

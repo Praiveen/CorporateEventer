@@ -122,21 +122,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         String jwt = null;
 
-        // Ищем JWT в cookies
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
-                if ("jwtToken".equals(cookie.getName())) { // Убедитесь, что это имя соответствует cookie с токеном
+                if ("jwtToken".equals(cookie.getName())) {
                     jwt = cookie.getValue();
                 }
             }
         }
-
-        // Продолжаем только если токен был найден
         if (jwt == null) {
             filterChain.doFilter(request, response);
             return;
         }
-
         try {
             final String userEmail = jwtService.extractUsername(jwt);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

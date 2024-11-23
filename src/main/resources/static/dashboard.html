@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en"buttonSpecial>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initialscale=1.0">
+    <header th:replace="~{linksDashboard}"></header> 
+
+    <title>CorpoEventer - Панель</title>
+ </head>
+ <body id="Topic1">
+    <header th:replace = "~{headerDashboard}" class="gridsp-1-16"></header>
+    <aside class="gridsp-1-2 mrgn-rgt0-grey-frame">
+        <div class="slider-tabs">
+            <button class="tab" data-target="section1">Раздел 1</button>
+            <button class="tab" data-target="section2">Раздел 2</button>
+            <button class="tab" data-target="section3">Раздел 3</button>
+            <button class="tab" data-target="section4" th:if="${#authentication.principal.company.director == #authentication.principal.userId}">Редактировать информацию о компании</button>
+        </div>
+    </aside>
+    <main class="flex1 gridsp-3-12">
+        <article class="slider-content flex1 ">
+            <section class="content flex1" id="section1">
+                <h2 th:text="${company.companyName}">dddd</h2>
+                <p th:text="${company.address}">Адрес компании</p>
+                <p th:text="${company.director}">Директор: ${company.director.userId}</p>
+                <p th:text="${#authentication.principal.company.director}">Директор: ${#authentication.principal.company.director.userId}</p>
+            </section>
+            <section class="content" id="section2">qqq</section>
+            <section class="content" id="section3">wwww</section>
+            <section class="content" id="section4" th:if="${#authentication.principal.company.director == #authentication.principal.userId}">Здесь будет форма редактирования информации о компании.</section>
+
+        </article>
+    </main>
+    <aside class="gridsp-15-2 mrgn-lft0-grey-frame">
+        <h2>Панель уведомлений</h2>
+        <div id="notifications-container">
+        </div>
+    </aside>
+ </body>
+ <!-- <script src="/java/companyCreating.js"></script> -->
+ <script src="/java/dashboardSlider.js"></script>
+ <script src="/java/headerSlider.js"></script>
+</html>

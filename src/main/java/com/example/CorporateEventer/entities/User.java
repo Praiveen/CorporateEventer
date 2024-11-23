@@ -1,17 +1,16 @@
 package com.example.CorporateEventer.entities;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import jakarta.persistence.*;
 
-import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.util.Collection;
 import java.util.Date;
@@ -29,13 +28,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     private String fullName;
-    private String name;
+    private String firstName;
     private String lastName;
     private String phoneNumber;
     private String email;
     private String password;
-    @Transient
-    private String passwordConfirm;
 
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = true)
@@ -47,6 +44,7 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = true)
+    @JsonBackReference("company-users")  
     private Company company;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -57,6 +55,12 @@ public class User implements UserDetails {
     )
     private List<CompanyRole> companyRoles; 
 
+    @OneToMany(mappedBy = "sender")
+    private List<Notification> sentNotifications;
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Notification> receivedNotifications;
+
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
     private Date createdAt;
@@ -64,8 +68,6 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
-
-    
 
 
     @Override
@@ -101,6 +103,14 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+    
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
 }

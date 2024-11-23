@@ -37,7 +37,7 @@ a{
 
 body{
 	max-width: 1400px;
-	background-color: #353535;
+	background-color: #37383b;
 	margin: 0 auto;
 	padding: 0;
 	display: grid;
@@ -65,7 +65,7 @@ address{
 }
 
 header{
-		grid-column: 1 / span 16;
+	grid-column: 1 / span 16;
 }
 
 nav{
@@ -1170,7 +1170,6 @@ modal-form a{
 	border-radius: 20px;
 	cursor: pointer;
 	transition: all 0.1s ;
-	margin: ;
 }
 
 .news_like_button.clicked {
@@ -1622,7 +1621,7 @@ input[type="number"] {
   border-radius: 3px; 
   outline: none; 
   text-align: center;
-  -webkit-appearance: none;
+  /* -webkit-appearance: none; */
   font-size: 15px;
 }
 

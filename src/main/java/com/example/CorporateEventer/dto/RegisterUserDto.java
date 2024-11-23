@@ -1,9 +1,19 @@
-package com.example.CorporateEventer.entities;
+package com.example.CorporateEventer.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+@NoArgsConstructor
+@Data
+@Accessors(chain = true)
 public class RegisterUserDto {
     private String email;
     private String password;
     private String fullName;
+    private String firstName;
+    private String lastName;
+    private String passwordConfirm;
 
     public String getEmail() {
         return email;
@@ -29,6 +39,15 @@ public class RegisterUserDto {
 
     public RegisterUserDto setFullName(String fullName) {
         this.fullName = fullName;
+        return this;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public RegisterUserDto setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
         return this;
     }
 

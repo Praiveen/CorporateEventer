@@ -1,4 +1,4 @@
-package com.example.CorporateEventer.entities;
+package com.example.CorporateEventer.dto;
 
 public class LoginUserDto {
     private String email;

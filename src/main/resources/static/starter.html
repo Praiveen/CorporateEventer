@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en"buttonSpecial>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initialscale=1.0">
+    <header th:replace="~{linksDashboard}"></header> 
+
+    <title>CorpoEventer - Панель</title>
+ </head>
+ <body id="Topic1">
+    <header th:replace = "~{headerDashboard}" class="gridsp-1-16"></header>
+    
+    <main class="gridsp-1-16 grey-frame">
+        <article class="flex1">
+            <div class="container">
+                <div class="box">
+                    <p>Выберите компанию, к которой присоедениться</p>
+                    <select id="companySelect">
+                        <option value="" disabled selected>Выберите компанию</option>
+                    </select>
+                    <button onclick="sendRequest()">Отправить заявку</button>
+                </div>
+                <div class="box">
+                    <h2>Создать компанию</h2>
+                    <button onclick="window.location.href='/dashboard/starter/createCompany'">Создать компанию</button>
+                </div>
+            </div>
+
+            
+        </article>
+    </main>
+ </body>
+
+<script src="/java/companySelector.js"></script>
+<script src="/java/headerSlider.js"></script>
+
+</html>

@@ -1,0 +1,439 @@
+p, legend, option, a, li{
+	font-family: 'PT Sans Caption', sans-serif;
+	font-size: clamp(11px, 1.6vw, 15px);
+}
+
+a{
+	font-family: 'Aldrich', sans-serif;
+	/*font-size: calc(0.3em + 1vw);*/
+}
+
+@media screen and (min-width: 1200px) {
+  p, legend, option, label{
+     font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  a{
+     font-size: 17px;
+  }
+}
+
+:root {
+	--main-size: calc(0.1em + 5vw);
+}
+
+::placeholder{
+	color: #000000;
+ 	text-overflow:ellipsis;
+ 	
+ 	font-size: clamp(0.8rem, 1.9vw, 1.4rem);
+
+}
+
+h1, h2, h3{
+	font-family: 'Alegreya SC', serif;
+	margin: 0;
+	padding: 0;
+	font-size: clamp(13px, 1.9vw, 30px);
+}
+
+a{
+	text-decoration: none;
+}
+
+
+
+body{
+	background-color: #424347;
+	/* margin: 0 auto; */
+	/* padding: 0; */
+	/* display: grid; */
+	/* grid-template-rows: 1fr auto auto auto auto; */
+	/* grid-template-columns: repeat(16, 1fr); */
+}
+
+
+
+nav{
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.9rem;
+    
+    border-bottom: solid;
+    border-color: #868686;
+    border-bottom-width: 0.5px;
+}
+
+.nav{
+    max-width: 1400px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+    
+}
+
+.nav-menu{
+	display: flex;
+	justify-content: center;
+  	align-items: center;
+  	z-index: 15;
+}
+
+.nav a{
+	font-size: min(20px, calc(0.2em + 1vw));
+	margin: 0 calc(0.1em + 1vw);
+	list-style-type: none;
+	padding: calc(0.1em + 0.2vw);
+	transition: color 0.2s, background 0.5s;
+	border-radius: 7px;
+	color: rgb(215, 215, 215);
+}
+
+.nav-menu a:hover {
+	background: #545e68;
+}
+
+.nav-menu a:active {
+	color: rgb(255, 255, 255);
+}
+
+.menu-button-container {
+	display: none;
+	height: 100%;
+	width: 30px;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+}
+
+#menu-toggle {
+	display: none;
+}
+
+.menu-button{
+	margin-top: 14px;
+}
+
+.menu-button,
+.menu-button::before,
+.menu-button::after {
+	display: block;
+	background-color: black;
+	position: absolute;
+	height: 4px;
+	width: 30px;
+	transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
+	border-radius: 2px;
+	z-index: 20;
+	cursor: pointer;
+}
+
+.all-menu-button{
+	height: 30px;
+	width: 30px;
+	cursor: pointer;
+}
+
+.menu-button::before {
+	content: '';
+	margin-top: -8px;
+}
+
+.menu-button::after {
+	content: '';
+	margin-top: 8px;
+}
+
+#menu-toggle:checked + .menu-button-container .menu-button::before {
+	margin-top: 0px;
+	transform: rotate(405deg);
+}
+
+#menu-toggle:checked + .menu-button-container .menu-button {
+	background: rgba(255, 255, 255, 0);
+}
+
+#menu-toggle:checked + .menu-button-container .menu-button::after {
+	margin-top: 0px;
+	transform: rotate(-405deg);
+}
+
+#menu-toggle:checked ~ .nav-menu{
+	visibility: visible;
+	opacity: 1;
+}
+
+@media (max-width: 800px){
+	.nav-tel img{
+		width: 55px;
+		height: 44px;
+		margin: 0;
+		margin-left: 15px;
+	}
+	.menu-button-container {
+		display: block;
+		margin-right: 15px;
+	}
+	.nav-menu {
+		display: flex;
+		visibility: hidden;
+		opacity: 0;
+		flex-direction: column;
+		position: absolute;
+		right: 0;
+		top: 0;
+		padding: 30px;
+		padding-top: 80px;
+		border-radius: 3px;
+		background: rgba(255, 255, 255, 0.28);
+		border-radius: 16px;
+		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+		backdrop-filter: blur(16.8px);
+		-webkit-backdrop-filter: blur(16.8px);
+		margin: 0 auto;
+		border-radius: 10px;
+		border: 7px solid #13315A;
+		list-style-type: none;
+		width: 60%;
+		height: 70%;
+		z-index: 10;
+		transition: all 0.4s cubic-bezier(0.77,0.2,0.05,1.0);
+	}
+
+	.nav-menu a{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 24px;
+		background: #13315A;
+		color: #BBC9DA;
+		width: 100%;
+		height: 10%;
+		margin: 3px;
+	}
+}
+
+
+
+
+
+
+
+
+/* формы входа */
+
+
+
+
+
+
+
+
+
+
+footer{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1400px;
+	padding: 30px 20px; 
+    color: rgb(215, 215, 215);
+	border-top: #868686 solid 0.5px;
+}
+
+footer p{
+	line-height: 2; /* Увеличьте значение для большего интервала */
+}
+
+li a{
+    color: rgb(215, 215, 215);
+}
+
+ul{
+    color: rgb(215, 215, 215);
+}
+
+.grid-foot{
+	display: grid;
+	grid-template-columns: 2fr 0.75fr 0.75fr;
+	gap: 10px;
+}
+
+.block-foot{
+	text-align: start;
+	transition: color 0.5s;
+}
+
+.block-foot h1{
+	margin-bottom: 10px;
+	text-decoration: underline;
+  	text-underline-offset: 5px;
+  	text-decoration-thickness: 2px;
+}
+
+.grid-foot .block-foot .other-pages ul{
+	list-style-type: none;
+	padding: 0;
+	margin: 0; 
+}
+
+.grid-foot .block-foot .other-pages li{
+	margin: 6px;
+}
+
+.grid-foot .block-foot .other-pages a{
+	color: rgb(215, 215, 215);
+	margin: 3px;
+	transition: color 0.2s;
+}
+
+.grid-foot .block-foot .other-pages a:hover{
+	color: orange;
+}
+
+.grid-foot .block-foot .other-pages  img{
+	width: 20px;
+	color: black;
+	margin-right: 5px;
+}
+
+.grid-foot .block-foot .other-pages{
+	display: flex;
+	flex-direction: column;
+	text-align: start;
+}
+
+.grid-foot .block-foot .other-pages .inline-tel{
+	display: flex;
+}
+
+.grid-foot .block-foot .foot-contacts{
+	display: flex;
+}
+
+.copyright{
+	text-align: center;
+    padding-top: 40px;
+}
+
+.modalFormSpecial .buttonSpecial {
+	text-align: center;
+	font-size: clamp(0.8rem, 2vw, 1.2rem);
+
+	background-color: #13315A;
+	color: #FFF;
+	border-radius: clamp(0.6rem, 2vw, 0.8rem);
+	border: none;
+
+	width: clamp(10rem, 20vw, 15rem);
+  height: 50px;
+  margin: 0 auto;
+  padding: 0;
+  cursor: pointer;
+}
+
+
+/* Стили для формы входа */
+
+
+
+.modal-container {
+	margin: 20px auto 20px auto;
+    width: clamp(17rem, 40vw, 35rem);
+    transition: opacity 0.3s ease;
+}
+
+.modal-container p{
+	margin: 10px;
+}
+.modal-block {
+    background-color: #aaaaaa;
+    border-radius: 30px;
+    text-align: center;
+    padding: 20px;
+}
+
+.modal-block .alert h1 {
+    color: red;
+}
+
+.modal-form {
+    text-align: center;
+}
+
+.modal-container .modal-form input[type=email], 
+.modal-container .modal-form input[type=password],
+.modal-container .modal-form input[type=text],
+.modal-container .modal-form input[type=tel]{
+    width: 90%;
+    margin: 0 auto;
+    border: 1px solid #eee;
+    border-radius: calc(0.1em + 1vw);
+    padding: calc(0.1em + 1vw);
+    margin-top: calc(0.1em + 1vw);
+    color: #000000;
+	background-color: #b9b9b9;
+	font-size: clamp(0.8rem, 1.9vw, 1.4rem);
+}
+
+.modal-form button {
+    text-align: center;
+    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    background-color: #13315A;
+    color: #FFF;
+    border-radius: clamp(0.6rem, 2vw, 0.8rem);
+    border: none;
+    width: clamp(10rem, 20vw, 15rem);
+    height: 50px;
+    margin: 0 auto;
+    padding: 0;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.modal-form button:hover {
+    background: #0F2646;
+}
+
+.register-form {
+    text-align: center;
+}
+
+.register-form button {
+    background-color: #f95959;
+    text-align: center;
+    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    color: #FFF;
+    border-radius: clamp(0.6rem, 2vw, 0.8rem);
+    border: none;
+    width: clamp(10rem, 20vw, 15rem);
+    height: 50px;
+    margin: 0 auto;
+    padding: 0;
+    cursor: pointer;
+}
+
+.register-form button:hover {
+    background: #fc4141;
+}
+
+.register-form p {
+    font-size: calc(0.2em + 1vw);
+    margin-bottom: 0px;
+    margin: 20px 0 0 0;
+}
+
+
+
+/* основа */
+
+main{
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.contentMainPage{
+	max-width: 1400px;
+}

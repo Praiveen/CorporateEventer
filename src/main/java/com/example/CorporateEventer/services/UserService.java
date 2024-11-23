@@ -3,9 +3,9 @@ package com.example.CorporateEventer.services;
 import com.example.CorporateEventer.entities.*;
 import com.example.CorporateEventer.repositories.*;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,15 +20,16 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // public Optional<User> getUserFromToken(String token) {
-    //     String username = JwtService.extractUsername(token);
-        
-    //     // Допустим, что у вас есть метод для поиска пользователя по имени
-    //     return findByEmail(username);
-    // }
-
     public Optional<User> findByEmail(String username) {
         return userRepository.findByEmail(username);
+    }
+
+    public Optional<User> findById(int id) {
+        return userRepository.findById(id);
+    }
+
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     public List<User> allUsers() {
@@ -37,5 +38,19 @@ public class UserService {
         userRepository.findAll().forEach(users::add);
 
         return users;
+    }
+
+    public Long getUserIdFromSecurity() {
+        Authentication authentication = userInfoFromSecurity();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return ((User) userDetails).getUserId();
+        }
+        return null;
+    }
+
+    public Authentication userInfoFromSecurity(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication;
     }
 }

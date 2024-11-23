@@ -3,110 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initialscale=1.0">
-    <title>Iron World - Главная</title>
-    <link rel="icon" type="image/svg+xml" href="pict/video_card.svg">
-    <link rel="icon" href="pict/video_card.ico" sizes="any">
-    <link rel="icon" type="image/png" href="pict/video_card.png">
-    <!-- <link rel="stylesheet" type="text/css" href="css/reset.css"> -->
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Caption&display=swap" rel="stylesheet">
+    <header th:replace="~{links}"></header> 
 
+    <title>CorpoEventer - Главная</title>
  </head>
  <body id="Topic1">
-    <div class="feedback">
+    <!-- <div class="feedback">
         <div>
             <a href="#Topic1">
                 <img src="pict/circle-arrow-up-svgrepo-com.svg">
-
             </a>
         </div>
-    </div>
-    <header th:replace = "~{header :: header}"></header>
+    </div> -->
+    <header th:replace = "~{headerStarterPage}"></header>
     
-    <main class="base-container">
+    <main class="contentMainPage">
         <article>
-
-            <section class="window-tabs">
-                <div class="window-1">
-                    <div>
-                        <h1>Магазин комплектущих</h1>
-                        <p>Выбери себе лучшее железо, по нужным требованиям!</p>
-                    </div>
-                    <a href="gpu_store" class="animated-button">ТЫК</a>
+            <section>
+                <h1>Заголовок</h1> <!-- Заготовка под заголовок -->
+                <div class="image-gallery">
+                    <img src="path/to/image1.jpg" alt="Изображение 1">
+                    <img src="path/to/image2.jpg" alt="Изображение 2">
+                    <img src="path/to/image3.jpg" alt="Изображение 3">
                 </div>
-                <div class="window-2">
-                    <h1>Личный кабинет</h1>
-                    <p>Войдите, чтобы получить доступ к магазину</p>
+                <div class="description">
+                    <p>Описание сайта 1</p>
+                    <p>Описание сайта 2</p>
+                    <p>Описание сайта 3</p>
                 </div>
-                <div class="window-4">
-                    <a href="#Topic2">
-                        <h1>Мы в соц сетях!</h1>
-                        <p>Вступайте к нам в группу и узнавайте первыми все акции и предложения!</p>
-                    </a>
-                </div>
-            </section>       
+            </section>
+            
         </article>
     </main>
-    <div class="">
-        <h2>Информация о пользователе</h2>
-        <div class="">
-            <label for="username">Имя пользователя:</label>
-            <span id="username"></span>
-        </div>
-        <div class="">
-            <label for="email">Электронная почта:</label>
-            <span id="email"></span>
-        </div>
-        <div class="">
-            <label for="name">Имя:</label>
-            <span id="name"></span>
-        </div>
-        <div class="">
-            <label for="lastName">Фамилия:</label>
-            <span id="lastName"></span>
-        </div>
-        <div class="">
-            <label for="phoneNumber">Телефон:</label>
-            <span id="phoneNumber"></span>
-        </div>
-    </div>
-    <footer th:replace = "~{footer :: footer}"></footer>
-
-
-    <script>
-        // Функция для получения информации о пользователе
-        async function fetchUserInfo() {
-            try {
-                const response = await fetch('/users/me', {
-                    method: 'GET',
-                    credentials: 'include', // Убедитесь, что куки отправляются с запросом
-                });
-
-                if (!response.ok) {
-                    throw new Error('Ошибка при получении данных о пользователе');
-                }
-
-                const user = await response.json();
-                document.getElementById('username').textContent = user.username;
-                document.getElementById('email').textContent = user.email;
-                document.getElementById('name').textContent = user.name;
-                document.getElementById('lastName').textContent = user.lastName;
-                document.getElementById('phoneNumber').textContent = user.phoneNumber;
-            } catch (error) {
-                console.error(error);
-                alert('Не удалось загрузить информацию о пользователе');
-            }
-        }
-
-        // Вызов функции при загрузке страницы
-        window.onload = fetchUserInfo;
-    </script>
+    <footer th:replace = "~{footer}"></footer>
  </body>
-
 </html>

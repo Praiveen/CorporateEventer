@@ -44,6 +44,11 @@ public class SecurityConfiguration {
                                 .requestMatchers("/**").permitAll()
                                 .requestMatchers("/").permitAll()
                 )
+                .formLogin((form) -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/dashboard")
+                        .permitAll()
+                )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
                 // .logout()

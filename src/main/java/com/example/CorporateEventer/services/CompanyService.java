@@ -1,6 +1,7 @@
 package com.example.CorporateEventer.services;
 
 import com.example.CorporateEventer.entities.Company;
+import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,9 @@ public class CompanyService {
 
     public void deleteById(Long id) {
         companyRepository.deleteById(id);
+    }
+
+    public Company findByDirector(Long userId) {
+        return companyRepository.findByDirector(userId);
     }
 }
