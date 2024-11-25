@@ -25,11 +25,10 @@ public class Company {
     @JoinColumn(name = "director_id")
     private Long director;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
     private List<Department> departments;
 
-    @OneToMany(mappedBy = "company")
-    @JsonManagedReference("company-users")
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
     private List<User> users;
 }
 

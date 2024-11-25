@@ -8,9 +8,9 @@
     <title>CorpoEventer - Панель</title>
  </head>
  <body id="Topic1">
-    <header th:replace = "~{headerDashboard}" class="gridsp-1-16"></header>
+    <header th:replace = "~{headerDashboard}" ></header>
     
-    <main class="gridsp-1-16 grey-frame">
+    <main class="gridsp-1-15 grey-frame mrgn-all03-grey-frame">
         <article class="flex1">
             <div class="container">
                 <div class="box">
@@ -29,9 +29,16 @@
             
         </article>
     </main>
+    <aside class="gridsp-16-3 mrgn-lft0-grey-frame grey-frame">
+        <h2>Панель уведомлений</h2>
+        <div id="notifications-container">
+        </div>
+    </aside>
  </body>
 
 <script src="/java/companySelector.js"></script>
+<script src="/java/dashboardOperator.js"></script>
+
 <script src="/java/headerSlider.js"></script>
 
 </html>

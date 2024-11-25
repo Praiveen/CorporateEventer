@@ -9,35 +9,127 @@
  </head>
  <body id="Topic1">
     <header th:replace = "~{headerDashboard}" class="gridsp-1-16"></header>
-    <aside class="gridsp-1-2 mrgn-rgt0-grey-frame">
+    <aside class="gridsp-1-2 mrgn-rgt0-grey-frame grey-frame">
         <div class="slider-tabs">
-            <button class="tab" data-target="section1">Раздел 1</button>
-            <button class="tab" data-target="section2">Раздел 2</button>
-            <button class="tab" data-target="section3">Раздел 3</button>
-            <button class="tab" data-target="section4" th:if="${#authentication.principal.company.director == #authentication.principal.userId}">Редактировать информацию о компании</button>
+            <button class="tab" data-target="section1">Календарь</button>
+            <button class="tab" data-target="section2">События</button>
+            <button class="tab" data-target="section3">Мероприятия</button>
+            <button class="tab" data-target="section4" th:if="${#authentication.principal.company.director == #authentication.principal.userId}">Редактор отделов и рабочих групп</button>
         </div>
     </aside>
-    <main class="flex1 gridsp-3-12">
-        <article class="slider-content flex1 ">
-            <section class="content flex1" id="section1">
-                <h2 th:text="${company.companyName}">dddd</h2>
-                <p th:text="${company.address}">Адрес компании</p>
-                <p th:text="${company.director}">Директор: ${company.director.userId}</p>
+    <main class="flex1 gridsp-3-13">
+        <article class="slider-content flex1">
+            <section class="content flex1 grey-frame" id="section1">
+                <!-- <h2 th:text="${company.companyName}">Календарь</h2> -->
+                <!-- <p th:text="${company.address}">Адрес компании</p> -->
+                <!-- <p th:text="${company.director}">Директор: ${company.director.userId}</p> -->
                 <p th:text="${#authentication.principal.company.director}">Директор: ${#authentication.principal.company.director.userId}</p>
             </section>
-            <section class="content" id="section2">qqq</section>
-            <section class="content" id="section3">wwww</section>
-            <section class="content" id="section4" th:if="${#authentication.principal.company.director == #authentication.principal.userId}">Здесь будет форма редактирования информации о компании.</section>
+            <section class="content grey-frame" id="section2">События</section>
+            <section class="content grey-frame" id="section3">Мероприятия</section>
+            <section class="content grey-frame" id="section4" th:if="${#authentication.principal.company.director == #authentication.principal.userId}">
+                <div class="department-management">
+                    <div class="section-header">
+                        <h2>Управление структурой компании</h2>
+                        <p class="section-description">Создавайте отделы и назначайте руководителей</p>
+                    </div>
+            
+                    <div class="management-container">
+                        <div class="create-department-block">
+                            <h3>Создание нового отдела</h3>
+                            <form id="createDepartmentForm" class="department-form">
+                                <div class="form-group">
+                                    <label for="departmentName">Название отдела:</label>
+                                    <input type="text" id="departmentName" name="departmentName" placeholder="Введите название отдела" required class="form-input">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="departmentHead">Руководитель отдела:</label>
+                                    <select id="departmentHead" name="departmentHead" required class="form-select">
+                                        <option value="">Выберите руководителя</option>
+                                    </select>
+                                </div>
+                    
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">
+                                        <i class="fas fa-plus"></i> Создать отдел
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+            
+                        <div class="departments-list-block">
+                            <div class="block-header">
+                                <h3>Существующие отделы</h3>
+                                <p class="block-description">Список всех отделов компании и их руководителей</p>
+                            </div>
+                            <div class="departments-container">
+                            </div>
+                        </div>
+                        <div class="create-subdepartment-block" style="display: none;">
+                            <div class="form-container">
+                                <h3>Создание подотдела</h3>
+                                <form id="createSubDepartmentForm" class="department-form">
+                                    <div class="form-group">
+                                        <label for="subdepartmentName">Название подотдела:</label>
+                                        <input type="text" id="subdepartmentName" name="subdepartmentName" 
+                                               placeholder="Введите название подотдела" required class="form-input">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="subDepartmentHead">Руководитель подотдела:</label>
+                                        <select id="subDepartmentHead" name="subDepartmentHead" required class="form-select">
+                                            <option value="">Выберите руководителя</option>
+                                        </select>
+                                    </div>
+                        
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn-primary">
+                                            <i class="fas fa-plus"></i> Создать подотдел
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="subdepartments-list-block" style="display: none;">
+                            <div class="block-header">
+                                <h3>Подотделы</h3>
+                                <p class="block-description">Список всех подотделов и их руководителей</p>
+                            </div>
+                            <div class="subdepartments-container"></div>
+                        </div>
+                        
+                    </div>
+
+
+                    
+                </div>
+            </section>
 
         </article>
     </main>
-    <aside class="gridsp-15-2 mrgn-lft0-grey-frame">
+    <aside class="gridsp-16-3 mrgn-lft0-grey-frame grey-frame">
         <h2>Панель уведомлений</h2>
         <div id="notifications-container">
         </div>
     </aside>
+
+    <div id="modalWindow" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"></h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+
  </body>
- <!-- <script src="/java/companyCreating.js"></script> -->
- <script src="/java/dashboardSlider.js"></script>
+ <script type="module" src="/java/departmentManager.js"></script>
+ <script type="module" src="/java/subDepartmentManager.js"></script>
+ <script src="/java/dashboardOperator.js"></script>
  <script src="/java/headerSlider.js"></script>
+ <script type="module" src="/java/searchInSelection.js"></script>
 </html>

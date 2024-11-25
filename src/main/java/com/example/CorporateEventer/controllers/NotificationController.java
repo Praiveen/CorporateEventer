@@ -14,8 +14,8 @@ import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.services.CompanyService;
 import com.example.CorporateEventer.services.UserService;
 
-@RequestMapping("/notification")
-@RestController
-public class NotificationController {
+// @RequestMapping("/notification")
+// @RestController
+// public class NotificationController {
     
-}
+// }

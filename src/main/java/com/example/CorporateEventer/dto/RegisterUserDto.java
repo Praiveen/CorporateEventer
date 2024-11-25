@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @NoArgsConstructor
+
 @Data
 @Accessors(chain = true)
 public class RegisterUserDto {

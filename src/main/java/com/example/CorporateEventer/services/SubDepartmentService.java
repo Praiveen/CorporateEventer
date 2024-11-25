@@ -1,6 +1,7 @@
 package com.example.CorporateEventer.services;
 
 import com.example.CorporateEventer.entities.SubDepartment;
+import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.repositories.SubDepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,9 @@ public class SubDepartmentService {
 
     public void deleteById(Long id) {
         subDepartmentRepository.deleteById(id);
+    }
+
+    public boolean isUserSubDepartmentManager(User user) {
+        return subDepartmentRepository.existsByManager(user);
     }
 }

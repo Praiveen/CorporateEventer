@@ -44,7 +44,7 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = true)
-    @JsonBackReference("company-users")  
+    // @JsonBackReference("company-users")  
     private Company company;
 
     @ManyToMany(fetch = FetchType.EAGER)

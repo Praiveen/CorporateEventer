@@ -50,7 +50,7 @@ public class PageController {
 
     @GetMapping("/login")
     public String loginPage() {
-        if (userService.userInfoFromSecurity().getPrincipal().equals("anonymousUser")) {
+        if (!userService.userInfoFromSecurity().getPrincipal().equals("anonymousUser")) {
             System.out.println("1111");
             return "redirect:dashboard";
         }
@@ -65,16 +65,31 @@ public class PageController {
 
     @GetMapping("/dashboard/starter")
     public String starterLoader() {
+        if(userService.userInfoFromSecurity().getPrincipal().equals("anonymousUser")){
+            return "redirect:/login";
+        }
+        Authentication authentication = userService.userInfoFromSecurity();
+        User currentUser = (User) authentication.getPrincipal();
+        if (currentUser.getCompany() != null)
+            return "redirect:/dashboard";
+
         return "starter";
     }
 
     @GetMapping("/dashboard/starter/createCompany")
     public String createCompanyrLoader() {
+        Authentication authentication = userService.userInfoFromSecurity();
+        User currentUser = (User) authentication.getPrincipal();
+        if (currentUser.getCompany() != null)
+            return "redirect:/dashboard";
         return "createCompany";
     }
 
     @GetMapping("/dashboard")
     public String dashboardLoader(Model model) {
+        if(userService.userInfoFromSecurity().getPrincipal().equals("anonymousUser")){
+            return "redirect:/login";
+        }
         Authentication authentication = userService.userInfoFromSecurity();
         User currentUser = (User) authentication.getPrincipal();
         if (currentUser.getCompany() == null)
@@ -84,6 +99,7 @@ public class PageController {
         model.addAttribute("company", company);
         return "dashboard";
     }
+
 
 }
 

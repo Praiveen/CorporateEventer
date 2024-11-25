@@ -3,6 +3,7 @@ package com.example.CorporateEventer.entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -13,6 +14,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notificationId;
     private String message;
+    private String type; 
 
     @ManyToOne
     @JoinColumn(name = "company_id")
