@@ -22,8 +22,9 @@ public class Company {
     @OneToMany(mappedBy = "company")
     private List<Notification> notifications;
 
+    @OneToOne
     @JoinColumn(name = "director_id")
-    private Long director;
+    private User director;
 
     @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
     private List<Department> departments;

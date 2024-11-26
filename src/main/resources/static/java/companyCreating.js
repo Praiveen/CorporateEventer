@@ -3,10 +3,10 @@ document.getElementById('createCompanyForm').addEventListener('submit', function
 
     const companyData = {
         companyName: document.getElementById('companyName').value,
-        address: document.getElementById('address').value
+        address: document.getElementById('address').value,
+        users: [],
+        departments: []
     };
-
-    // const companyData = new FormData(form);
 
     fetch('/dashboard/starter/createCompany/newcompany', {
         method: 'POST',
@@ -17,7 +17,9 @@ document.getElementById('createCompanyForm').addEventListener('submit', function
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Ошибка входа');
+            return response.text().then(text => {
+                throw new Error(text || 'Ошибка при создании компании');
+            });
         }
         return response.json();
     })
@@ -25,4 +27,8 @@ document.getElementById('createCompanyForm').addEventListener('submit', function
         console.log('Успех:', data);
         window.location.href = '/dashboard';
     })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert(error.message);
+    });
 });

@@ -94,7 +94,7 @@ public class PageController {
         User currentUser = (User) authentication.getPrincipal();
         if (currentUser.getCompany() == null)
             return "redirect:/dashboard/starter";
-        Company company = companyService.findByDirector(currentUser.getUserId());
+        Company company = companyService.findByDirector(currentUser);
         model.addAttribute("user", currentUser);
         model.addAttribute("company", company);
         return "dashboard";

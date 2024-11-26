@@ -16,13 +16,13 @@ export class SubDepartmentManager {
 
 
     setupSearchableSelect() {
-        // Убедимся, что у нас есть пользователи
-        if (!this.users || this.users.length === 0) {
-            console.warn('Список пользователей пуст при настройке селекта');
-            return;
+        if (this.searchableSelect) {
+            const oldWrapper = this.subDepartmentHeadSelect.nextElementSibling;
+            if (oldWrapper && oldWrapper.classList.contains('custom-select-wrapper')) {
+                oldWrapper.remove();
+            }
         }
     
-        // Создаем searchableSelect с правильными параметрами
         this.searchableSelect = createSearchableSelect(
             this.subDepartmentHeadSelect,
             this.users,
@@ -30,20 +30,17 @@ export class SubDepartmentManager {
                 getDisplayText: (user) => `${user.firstName} ${user.lastName}`,
                 getValue: (user) => user.userId,
                 placeholder: 'Выберите руководителя подотдела',
-                searchPlaceholder: 'Поиск сотрудника...',
-                onSelect: (selectedUser) => {
-                    console.log('Выбран пользователь:', selectedUser);
-                }
+                searchPlaceholder: 'Поиск сотрудника...'
             }
         );
     }
 
     async loadUsers() {
         try {
-            const response = await fetch('/dashboard/company/users');
+            const response = await fetch(`/dashboard/departments/${this.parentDepartmentId}/available-managers`);
             this.users = await response.json();
-        this.updateUsersList(this.users);
-
+            this.updateUsersList(this.users);
+    
             if (this.searchableSelect) {
                 this.searchableSelect.update(this.users);
             }
@@ -53,25 +50,32 @@ export class SubDepartmentManager {
     }
 
     async initialize() {
-        await this.loadUsers(); // Сначала загружаем пользователей
-        this.setupSearchableSelect(); // Затем настраиваем селект
-        await this.loadSubDepartments(); // Загружаем подотделы
-        this.setupEventListeners(); // Настраиваем обработчики событий
+        await this.loadUsers();
+        this.setupSearchableSelect();
+        await this.loadSubDepartments();
+        this.setupEventListeners();
         
-        // Показываем блоки подотделов
         document.querySelector('.create-subdepartment-block').style.display = 'block';
         document.querySelector('.subdepartments-list-block').style.display = 'block';
     }
 
-    async loadSubDepartments() {
+    async loadUsers() {
         try {
-            const response = await fetch(`/dashboard/departments/${this.parentDepartmentId}/subdepartments`);
-            const subdepartments = await response.json();
-            this.renderSubDepartments(subdepartments);
+            const response = await fetch(`/dashboard/departments/${this.parentDepartmentId}/available-managers`);
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке пользователей');
+            }
+            this.users = await response.json();
+            this.updateUsersList(this.users);
+    
+            if (this.searchableSelect) {
+                this.searchableSelect.update(this.users);
+            }
         } catch (error) {
-            console.error('Ошибка при загрузке подотделов:', error);
+            console.error('Ошибка при загрузке пользователей:', error);
         }
     }
+
     updateUsersList(users) {
         this.subDepartmentHeadSelect.innerHTML = '<option value="">Выберите руководителя</option>';
         users.forEach(user => {
@@ -80,6 +84,19 @@ export class SubDepartmentManager {
             option.textContent = `${user.firstName} ${user.lastName}`;
             this.subDepartmentHeadSelect.appendChild(option);
         });
+    }
+
+    async loadSubDepartments() {
+        try {
+            const response = await fetch(`/dashboard/departments/${this.parentDepartmentId}/subdepartments`);
+            if (!response.ok) throw new Error('Ошибка при загрузке подотделов');
+            
+            const subdepartments = await response.json();
+            this.renderSubDepartments(subdepartments);
+        } catch (error) {
+            console.error('Ошибка при загрузке подотделов:', error);
+            this.subdepartmentsContainer.innerHTML = '<div class="error-message">Ошибка при загрузке подотделов</div>';
+        }
     }
 
     setupEventListeners() {
@@ -99,7 +116,7 @@ export class SubDepartmentManager {
             
             const subdepartmentData = {
                 subdepartmentName: document.getElementById('subdepartmentName').value,
-                headId: parseInt(headId), // Преобразуем в число
+                headId: parseInt(headId),
                 departmentId: this.parentDepartmentId
             };
             
@@ -147,11 +164,14 @@ export class SubDepartmentManager {
 
         subdepartments.forEach(subdepartment => {
             const subdepartmentElement = document.createElement('div');
-            subdepartmentElement.className = 'department-card'; // Используем тот же стиль
+            subdepartmentElement.className = 'department-card';
             subdepartmentElement.innerHTML = `
                 <div class="department-header">
                     <h4 class="department-name">${subdepartment.name}</h4>
                     <div class="department-actions">
+                        <button class="btn-manage-employees" data-id="${subdepartment.id}" title="Управление сотрудниками">
+                            <i class="fas fa-users"></i>
+                        </button>
                         <button class="btn-edit" data-id="${subdepartment.id}">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -174,6 +194,17 @@ export class SubDepartmentManager {
 
             const editBtn = subdepartmentElement.querySelector('.btn-edit');
             const deleteBtn = subdepartmentElement.querySelector('.btn-delete');
+            const manageEmployeesBtn = subdepartmentElement.querySelector('.btn-manage-employees');
+            manageEmployeesBtn.addEventListener('click', () => {
+                const employeesBlock = document.querySelector('.subdepartment-employees-block');
+                if (employeesBlock.style.display === 'block') {
+                    employeesBlock.style.display = 'none';
+                    window.employeeManager.setCurrentSubdepartment(null);
+                } else {
+                    employeesBlock.style.display = 'block';
+                    window.employeeManager.setCurrentSubdepartment(subdepartment.id);
+                }
+            });
 
             editBtn.addEventListener('click', () => this.editSubDepartment(subdepartment.id));
             deleteBtn.addEventListener('click', () => this.deleteSubDepartment(subdepartment.id));
@@ -184,7 +215,6 @@ export class SubDepartmentManager {
 
     async editSubDepartment(subdepartmentId) {
         try {
-            // Получаем данные подотдела и список пользователей
             const [subdepartmentResponse, usersResponse] = await Promise.all([
                 fetch(`/dashboard/departments/subdepartments/${subdepartmentId}`),
                 fetch('/dashboard/company/users')
@@ -192,16 +222,11 @@ export class SubDepartmentManager {
     
             const subdepartment = await subdepartmentResponse.json();
             const users = await usersResponse.json();
-    
-            // Получаем ссылку на модальное окно
             const modal = document.getElementById('modalWindow');
             const modalTitle = modal.querySelector('.modal-title');
             const modalBody = modal.querySelector('.modal-body');
-    
-            // Устанавливаем заголовок
+
             modalTitle.textContent = 'Редактирование подотдела';
-    
-            // Создаем форму редактирования
             modalBody.innerHTML = `
                 <form id="editSubDepartmentForm" class="edit-form">
                     <input type="hidden" id="editSubDepartmentId" value="${subdepartmentId}">
@@ -221,8 +246,6 @@ export class SubDepartmentManager {
                     </div>
                 </form>
             `;
-    
-            // Создаем поисковый селект для выбора руководителя
             const editSelect = modalBody.querySelector('#editSubDepartmentHead');
             createSearchableSelect(
                 editSelect,
@@ -234,8 +257,6 @@ export class SubDepartmentManager {
                     searchPlaceholder: 'Поиск сотрудника...'
                 }
             );
-    
-            // Устанавливаем текущего руководителя
             editSelect.value = subdepartment.managerId;
             const selectWrapper = editSelect.nextElementSibling;
             if (selectWrapper) {
@@ -244,8 +265,6 @@ export class SubDepartmentManager {
                     selectedValue.textContent = subdepartment.managerName;
                 }
             }
-    
-            // Добавляем обработчик отправки формы
             const form = modalBody.querySelector('#editSubDepartmentForm');
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -266,7 +285,6 @@ export class SubDepartmentManager {
                     });
     
                     if (response.ok) {
-                        // Обновляем списки и закрываем модальное окно
                         await this.loadSubDepartments();
                         await this.loadUsers();
                         if (window.departmentManager) {
@@ -283,8 +301,6 @@ export class SubDepartmentManager {
                     alert('Произошла ошибка при обновлении подотдела');
                 }
             });
-    
-            // Показываем модальное окно
             modal.classList.add('show');
     
         } catch (error) {

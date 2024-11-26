@@ -14,7 +14,12 @@
             <button class="tab" data-target="section1">Календарь</button>
             <button class="tab" data-target="section2">События</button>
             <button class="tab" data-target="section3">Мероприятия</button>
-            <button class="tab" data-target="section4" th:if="${#authentication.principal.company.director == #authentication.principal.userId}">Редактор отделов и рабочих групп</button>
+            <button class="tab" data-target="section4" 
+    th:if="${#authentication.principal.company.director == #authentication.principal or 
+           #authentication.principal.department != null or 
+           #authentication.principal.subDepartment != null}">
+    Управление структурой
+</button>
         </div>
     </aside>
     <main class="flex1 gridsp-3-13">
@@ -24,10 +29,14 @@
                 <!-- <p th:text="${company.address}">Адрес компании</p> -->
                 <!-- <p th:text="${company.director}">Директор: ${company.director.userId}</p> -->
                 <p th:text="${#authentication.principal.company.director}">Директор: ${#authentication.principal.company.director.userId}</p>
+                <p th:text="${#authentication.principal.userId}"></p>
             </section>
             <section class="content grey-frame" id="section2">События</section>
             <section class="content grey-frame" id="section3">Мероприятия</section>
-            <section class="content grey-frame" id="section4" th:if="${#authentication.principal.company.director == #authentication.principal.userId}">
+            <section class="content grey-frame" id="section4" 
+    th:if="${#authentication.principal.company.director == #authentication.principal or 
+           #authentication.principal.department != null or 
+           #authentication.principal.subDepartment != null}">
                 <div class="department-management">
                     <div class="section-header">
                         <h2>Управление структурой компании</h2>
@@ -100,6 +109,43 @@
                             <div class="subdepartments-container"></div>
                         </div>
                         
+                        <div class="department-employees-block" style="display: none;">
+                            <div class="block-header">
+                                <h3>Управление сотрудниками отдела</h3>
+                                <p class="block-description">Назначайте и перемещайте сотрудников между отделами</p>
+                            </div>
+                            
+                            <div class="employees-management">
+                                <div class="employees-header">
+                                    <div class="employees-title">Сотрудники отдела</div>
+                                    <button class="btn-primary add-employees" id="addDepartmentEmployees">
+                                        <i class="fas fa-user-plus"></i> Добавить сотрудников
+                                    </button>
+                                </div>
+                                
+                                <div class="employee-drag-area" id="departmentEmployeesList">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="subdepartment-employees-block" style="display: none;">
+                            <div class="block-header">
+                                <h3>Управление сотрудниками подотдела</h3>
+                                <p class="block-description">Управляйте составом подотдела</p>
+                            </div>
+                            
+                            <div class="employees-management">
+                                <div class="employees-header">
+                                    <div class="employees-title">Сотрудники подотдела</div>
+                                    <button class="btn-primary add-employees" id="addSubdepartmentEmployees">
+                                        <i class="fas fa-user-plus"></i> Добавить сотрудников
+                                    </button>
+                                </div>
+                                
+                                <div class="employee-drag-area" id="subdepartmentEmployeesList">
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -126,10 +172,29 @@
         </div>
     </div>
 
+    <div id="employeesModal" class="modal employees-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Добавление сотрудников</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="employee-search" placeholder="Поиск сотрудников...">
+                <div class="employees-list">
+                </div>
+            </div>
+        </div>
+    </div>
+
  </body>
  <script type="module" src="/java/departmentManager.js"></script>
  <script type="module" src="/java/subDepartmentManager.js"></script>
  <script src="/java/dashboardOperator.js"></script>
  <script src="/java/headerSlider.js"></script>
  <script type="module" src="/java/searchInSelection.js"></script>
+ <script type="module">
+    import EmployeeManager from '/java/employeeManager.js';
+    const employeeManager = new EmployeeManager();
+    window.employeeManager = employeeManager;
+</script>
 </html>

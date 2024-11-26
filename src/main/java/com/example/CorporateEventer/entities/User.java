@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.util.Collection;
 import java.util.Date;
@@ -47,13 +46,13 @@ public class User implements UserDetails {
     // @JsonBackReference("company-users")  
     private Company company;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "user_companyroles",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private List<CompanyRole> companyRoles; 
+    // @ManyToMany(fetch = FetchType.EAGER)
+    // @JoinTable(
+    //     name = "user_companyroles",
+    //     joinColumns = @JoinColumn(name = "user_id"),
+    //     inverseJoinColumns = @JoinColumn(name = "role_id")
+    // )
+    // private List<CompanyRole> companyRoles; 
 
     @OneToMany(mappedBy = "sender")
     private List<Notification> sentNotifications;

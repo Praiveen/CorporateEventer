@@ -53,6 +53,12 @@ export class DepartmentManager {
         try {
             const response = await fetch('/dashboard/company/users');
             this.users = await response.json();
+            
+            if (this.searchableSelect) {
+                this.searchableSelect.update(this.users);
+                this.searchableSelect.reset();
+            }
+            
             this.updateUsersList(this.users);
         } catch (error) {
             console.error('Ошибка при загрузке пользователей:', error);
@@ -79,10 +85,19 @@ export class DepartmentManager {
      * Настройка селекта руководителя
      */
     setupSearchableSelect() {
+        if (this.searchableSelect) {
+            const oldWrapper = this.departmentHeadSelect.nextElementSibling;
+            if (oldWrapper && oldWrapper.classList.contains('custom-select-wrapper')) {
+                oldWrapper.remove();
+            }
+        }
+    
         this.searchableSelect = createSearchableSelect(
             this.departmentHeadSelect, 
             this.users,
             {
+                getDisplayText: (user) => `${user.firstName} ${user.lastName}`,
+                getValue: (user) => user.userId,
                 placeholder: 'Выберите руководителя',
                 searchPlaceholder: 'Поиск сотрудника...'
             }
@@ -140,28 +155,30 @@ export class DepartmentManager {
     setupEventListeners() {
         this.form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const departmentData = {
-                departmentName: document.getElementById('departmentName').value,
-                headId: this.departmentHeadSelect.value
+            
+            const formData = {
+                departmentName: this.form.querySelector('#departmentName').value,
+                headId: parseInt(this.departmentHeadSelect.value)
             };
-
+    
             try {
                 const response = await fetch('/dashboard/departments/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(departmentData)
+                    body: JSON.stringify(formData)
                 });
-
+    
                 if (response.ok) {
-                    alert('Отдел успешно создан');
+                    this.form.reset();
+                    this.searchableSelect.reset();
+                    
                     await this.loadDepartments();
                     await this.loadUsers();
-                    this.form.reset();
-
-                    if (this.searchableSelect) {
-                        this.searchableSelect.setValue('', 'Выберите руководителя');
+                    
+                    if (this.subDepartmentManager) {
+                        await this.subDepartmentManager.loadUsers();
                     }
                 } else {
                     const error = await response.text();
@@ -188,15 +205,18 @@ export class DepartmentManager {
                 <div class="department-header">
                     <h4 class="department-name">${department.name}</h4>
                     <div class="department-actions">
-                    <button class="btn-subdepartments" data-id="${department.id}">
-                        <i class="fas fa-sitemap"></i>
-                    </button>
-                    <button class="btn-edit" data-id="${department.id}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-delete" data-id="${department.id}">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                        <button class="btn-manage-employees" data-id="${department.id}" title="Управление сотрудниками">
+                            <i class="fas fa-users"></i>
+                        </button>
+                        <button class="btn-subdepartments" data-id="${department.id}">
+                            <i class="fas fa-sitemap"></i>
+                        </button>
+                        <button class="btn-edit" data-id="${department.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-delete" data-id="${department.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="department-info">
@@ -215,11 +235,25 @@ export class DepartmentManager {
             const editBtn = departmentElement.querySelector('.btn-edit');
             const deleteBtn = departmentElement.querySelector('.btn-delete');
 
+            const manageEmployeesBtn = departmentElement.querySelector('.btn-manage-employees');
+            manageEmployeesBtn.addEventListener('click', () => {
+                const employeesBlock = document.querySelector('.department-employees-block');
+                if (employeesBlock.style.display === 'block') {
+                    employeesBlock.style.display = 'none';
+                    window.employeeManager.setCurrentDepartment(null);
+                } else {
+                    employeesBlock.style.display = 'block';
+                    window.employeeManager.setCurrentDepartment(department.id);
+                }
+            });
+
             subdepartmentsBtn.addEventListener('click', () => this.showSubDepartments(department.id));
             editBtn.addEventListener('click', () => this.editDepartment(department.id));
             deleteBtn.addEventListener('click', () => this.deleteDepartment(department.id));
 
             this.departmentsContainer.appendChild(departmentElement);
+
+            
         });
     }
 

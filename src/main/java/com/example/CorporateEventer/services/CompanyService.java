@@ -31,11 +31,11 @@ public class CompanyService {
     //     return companyRepository.addUsersUser(user);
     // }
 
-    public void deleteById(Long id) {
-        companyRepository.deleteById(id);
+    public void deleteById(Long directorId) {
+        companyRepository.deleteById(directorId);
     }
 
-    public Company findByDirector(Long userId) {
-        return companyRepository.findByDirector(userId);
+    public Company findByDirector(User director) {
+        return companyRepository.findByDirector(director);
     }
 }

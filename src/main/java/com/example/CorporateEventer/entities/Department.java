@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -16,6 +18,7 @@ public class Department {
 
     private String departmentName;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;

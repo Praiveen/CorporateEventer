@@ -135,9 +135,18 @@ export function createSearchableSelect(originalSelect, items, {
             items = newItems;
             updateOptionsContainer(items);
         },
+        reset: () => {
+            originalSelect.value = '';
+            selectButton.querySelector('.selected-value').textContent = placeholder;
+            selectWrapper.classList.remove('valid');
+            selectWrapper.classList.add('invalid');
+            updateOptionsContainer(items);
+        },
         setValue: (value, displayText) => {
             originalSelect.value = value;
             selectButton.querySelector('.selected-value').textContent = displayText;
+            selectWrapper.classList.add('valid');
+            selectWrapper.classList.remove('invalid');
             
             const event = new Event('change', { bubbles: true });
             originalSelect.dispatchEvent(event);
