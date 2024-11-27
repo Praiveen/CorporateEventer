@@ -34,4 +34,8 @@ public class SubDepartmentService {
     public boolean isUserSubDepartmentManager(User user) {
         return subDepartmentRepository.existsByManager(user);
     }
+
+    public SubDepartment findByManager(User currentUser) {
+        return subDepartmentRepository.findByManager(currentUser);
+    }
 }

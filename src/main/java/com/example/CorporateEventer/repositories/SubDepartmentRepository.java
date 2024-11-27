@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SubDepartmentRepository extends JpaRepository<SubDepartment, Long> {
     boolean existsByManager(User manager);
+    SubDepartment findByManager(User currentUser);
 }

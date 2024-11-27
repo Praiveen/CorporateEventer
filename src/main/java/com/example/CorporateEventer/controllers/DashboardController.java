@@ -919,6 +919,28 @@ public class DashboardController {
         }
     }
 
+    @GetMapping("/current-user-subdepartment")
+    public ResponseEntity<?> getCurrentUserSubdepartment() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User currentUser = (User) authentication.getPrincipal();
+            
+            SubDepartment subdepartment = subDepartmentService.findByManager(currentUser);
+            if (subdepartment == null) {
+                return ResponseEntity.notFound().build();
+            }
+                
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", subdepartment.getSubdepartmentId());
+            response.put("name", subdepartment.getSubdepartmentName());
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Ошибка при получении информации о подотделе: " + e.getMessage());
+        }
+    }
+
 
     /*
      * Назначение полного доступа

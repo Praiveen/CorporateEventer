@@ -3,7 +3,31 @@ class EmployeeManager {
         this.currentDepartmentId = null;
         this.currentSubdepartmentId = null;
         this.initializeEventListeners();
-
+    
+        // Показываем панель управления для менеджера подотдела
+        if (window.userRoles.includes('SUBDEPARTMENT_MANAGER')) {
+            const subdepartmentEmployeesBlock = document.querySelector('.subdepartment-employees-block');
+            if (subdepartmentEmployeesBlock) {
+                subdepartmentEmployeesBlock.style.display = 'block';
+            }
+            // Получаем ID подотдела для менеджера
+            fetch('/dashboard/current-user-subdepartment')
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    return response.json();
+                })
+                .then(subdepartment => {
+                    console.log('Received subdepartment data:', subdepartment);
+                    if (subdepartment && subdepartment.id) {
+                        this.setCurrentSubdepartment(subdepartment.id);
+                    } else {
+                        console.error('No subdepartment ID in response');
+                    }
+                })
+                .catch(error => console.error('Error fetching subdepartment:', error));
+        }
+    
+        // Существующая логика для менеджера отдела
         if (window.userRoles.includes('DEPARTMENT_MANAGER')) {
             this.loadManagerDepartment();
         }
@@ -28,6 +52,14 @@ class EmployeeManager {
             await this.loadEmployeesList('department');
         } catch (error) {
             console.error('Error in loadManagerDepartment:', error);
+        }
+    }
+
+    setCurrentSubdepartment(subdepartmentId) {
+        console.log('Setting current subdepartment ID:', subdepartmentId);
+        this.currentSubdepartmentId = subdepartmentId;
+        if (subdepartmentId) {
+            this.loadEmployeesList('subdepartment');
         }
     }
 
@@ -76,25 +108,18 @@ class EmployeeManager {
             if (targetType === 'department') {
                 targetId = this.currentDepartmentId;
                 console.log('Using department ID:', targetId);
-                
-                // Если ID не определен и пользователь - менеджер отдела, 
-                // попробуем получить ID отдела
-                if (!targetId && window.userRoles.includes('DEPARTMENT_MANAGER')) {
-                    console.log('Attempting to fetch department ID for manager...');
-                    const response = await fetch('/dashboard/current-user-department');
-                    if (!response.ok) throw new Error('Ошибка при загрузке информации об отделе');
-                    
-                    const department = await response.json();
-                    targetId = department.id;
-                    this.currentDepartmentId = targetId;
-                    console.log('Retrieved department ID:', targetId);
-                }
             } else if (targetType === 'subdepartment') {
                 targetId = this.currentSubdepartmentId;
                 console.log('Using subdepartment ID:', targetId);
             }
     
             if (!targetId) {
+                console.log('Current state:', {
+                    targetType,
+                    departmentId: this.currentDepartmentId,
+                    subdepartmentId: this.currentSubdepartmentId,
+                    userRoles: window.userRoles
+                });
                 throw new Error('ID не определен');
             }
     

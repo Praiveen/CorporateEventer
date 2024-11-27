@@ -25,10 +25,6 @@ public class Meeting {
     @JoinColumn(name = "organizer_id")
     private User organizer;
 
-    // @ManyToOne
-    // @JoinColumn(name = "room_id")
-    // private Room room;
-
     @ManyToMany
     private List<User> participants;
 }
