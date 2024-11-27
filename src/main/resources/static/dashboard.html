@@ -209,7 +209,7 @@
     const employeeManager = new EmployeeManager();
     window.employeeManager = employeeManager;
 </script>
-<script>
-    window.userRoles = /*[[${#authentication.principal.roles.?[name]}]]*/ [];
+<script th:inline="javascript">
+    window.userRoles = /*[[${#authentication.principal.roles.![name]}]]*/ [];
 </script>
 </html>

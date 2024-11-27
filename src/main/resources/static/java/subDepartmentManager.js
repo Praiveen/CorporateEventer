@@ -1,18 +1,91 @@
 import { createSearchableSelect } from './searchInSelection.js';
 
 export class SubDepartmentManager {
-    constructor(parentDepartmentId) {
+    constructor(parentDepartmentId = null) {
+        console.log('SubDepartmentManager constructor called');
+        
         this.parentDepartmentId = parentDepartmentId;
         this.form = document.getElementById('createSubDepartmentForm');
         this.subDepartmentHeadSelect = document.getElementById('subDepartmentHead');
         this.subdepartmentsContainer = document.querySelector('.subdepartments-container');
         this.users = [];
-        
         this.submitHandler = null;
-        
-        this.initialize();
+
+        if (window.userRoles.includes('DEPARTMENT_MANAGER')) {
+            // Для менеджера отдела показываем блоки сразу
+            this.loadManagerDepartment();
+        } else if (parentDepartmentId) {
+            // Для директора инициализируем с переданным ID отдела
+            this.initialize();
+        }
     }
 
+    setupForDirector() {
+        console.log('Setting up for Director');
+        const createBlock = document.querySelector('.create-subdepartment-block');
+        const listBlock = document.querySelector('.subdepartments-list-block');
+        if (createBlock) createBlock.style.display = 'none';
+        if (listBlock) listBlock.style.display = 'none';
+    }
+
+    setupForDepartmentManager() {
+        console.log('Setting up for Department Manager');
+        const createBlock = document.querySelector('.create-subdepartment-block');
+        const listBlock = document.querySelector('.subdepartments-list-block');
+        if (createBlock) createBlock.style.display = 'block';
+        if (listBlock) listBlock.style.display = 'block';
+
+        this.loadManagerDepartment();
+    }
+
+    toggleSubDepartmentBlocks() {
+        const createBlock = document.querySelector('.create-subdepartment-block');
+        const listBlock = document.querySelector('.subdepartments-list-block');
+        if (createBlock) createBlock.style.display = createBlock.style.display === 'none' ? 'block' : 'none';
+        if (listBlock) listBlock.style.display = listBlock.style.display === 'none' ? 'block' : 'none';
+    }
+
+
+    async loadManagerDepartment() {
+        try {
+            console.log('Fetching manager department info...');
+            const response = await fetch('/dashboard/current-user-department');
+            if (!response.ok) throw new Error('Ошибка при загрузке информации об отделе');
+            
+            const department = await response.json();
+            console.log('Received department info:', department);
+            
+            if (!department || !department.id) {
+                throw new Error('Не удалось получить ID отдела');
+            }
+            
+            this.parentDepartmentId = department.id;
+            console.log('Set parentDepartmentId:', this.parentDepartmentId);
+            
+            // Показываем блоки для менеджера отдела
+            const createBlock = document.querySelector('.create-subdepartment-block');
+            const listBlock = document.querySelector('.subdepartments-list-block');
+            if (createBlock) createBlock.style.display = 'block';
+            if (listBlock) listBlock.style.display = 'block';
+            
+            await this.initialize();
+        } catch (error) {
+            console.error('Error in loadManagerDepartment:', error);
+            alert('Ошибка при загрузке информации об отделе');
+        }
+    }
+
+    async initialize() {
+        console.log('Initializing with parentDepartmentId:', this.parentDepartmentId);
+        if (!this.parentDepartmentId) {
+            console.error('No parentDepartmentId available');
+            return;
+        }
+        
+        await this.loadUsers();
+        await this.loadSubDepartments();
+        this.setupEventListeners();
+    }
 
 
     setupSearchableSelect() {
@@ -37,41 +110,30 @@ export class SubDepartmentManager {
 
     async loadUsers() {
         try {
+            console.log('Loading users for department:', this.parentDepartmentId);
             const response = await fetch(`/dashboard/departments/${this.parentDepartmentId}/available-managers`);
+            if (!response.ok) throw new Error('Ошибка при загрузке пользователей');
+            
             this.users = await response.json();
             this.updateUsersList(this.users);
-    
+            
             if (this.searchableSelect) {
                 this.searchableSelect.update(this.users);
             }
         } catch (error) {
-            console.error('Ошибка при загрузке пользователей:', error);
+            console.error('Error loading users:', error);
         }
     }
 
-    async initialize() {
-        await this.loadUsers();
-        this.setupSearchableSelect();
-        await this.loadSubDepartments();
-        this.setupEventListeners();
-    
-        // Проверка ролей для отображения соответствующих блоков
-        this.checkUserRoles();
-    }
-
-    checkUserRoles() {
-        const userRoles = window.userRoles; // Теперь роли пользователя доступны в глобальной переменной
-    
-        const isDirector = userRoles.includes('DIRECTOR');
-        const isDepartmentManager = userRoles.includes('DEPARTMENT_MANAGER');
-        const isSubDepartmentManager = userRoles.includes('SUBDEPARTMENT_MANAGER');
-        console.log(isDepartmentManager);
-    
-        // Пример: показываем блоки в зависимости от ролей
-        if (isDepartmentManager || isSubDepartmentManager) {
-            document.querySelector('.subdepartment-employees-block').style.display = 'block';
-        }
-    }
+    // async initialize() {
+    //     await this.loadUsers();
+    //     this.setupSearchableSelect();
+    //     await this.loadSubDepartments();
+    //     this.setupEventListeners();
+        
+    //     document.querySelector('.create-subdepartment-block').style.display = 'block';
+    //     document.querySelector('.subdepartments-list-block').style.display = 'block';
+    // }
 
     async loadUsers() {
         try {
@@ -102,13 +164,14 @@ export class SubDepartmentManager {
 
     async loadSubDepartments() {
         try {
+            console.log('Loading subdepartments for department:', this.parentDepartmentId);
             const response = await fetch(`/dashboard/departments/${this.parentDepartmentId}/subdepartments`);
             if (!response.ok) throw new Error('Ошибка при загрузке подотделов');
             
             const subdepartments = await response.json();
             this.renderSubDepartments(subdepartments);
         } catch (error) {
-            console.error('Ошибка при загрузке подотделов:', error);
+            console.error('Error loading subdepartments:', error);
             this.subdepartmentsContainer.innerHTML = '<div class="error-message">Ошибка при загрузке подотделов</div>';
         }
     }
@@ -373,3 +436,11 @@ export class SubDepartmentManager {
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const userRoles = window.userRoles;
+    
+    if (userRoles.includes('DIRECTOR') || userRoles.includes('DEPARTMENT_MANAGER')) {
+        window.subDepartmentManager = new SubDepartmentManager();
+    }
+});

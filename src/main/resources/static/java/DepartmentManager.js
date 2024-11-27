@@ -31,20 +31,6 @@ export class DepartmentManager {
         await this.loadDepartments();
         this.setupSearchableSelect();
         this.setupEventListeners();
-        this.checkUserRoles();
-    }
-
-    checkUserRoles() {
-        const userRoles = window.userRoles;
-    
-        const isDirector = userRoles.includes('DIRECTOR');
-        const isDepartmentManager = userRoles.includes('DEPARTMENT_MANAGER');
-    
-        if (isDirector || isDepartmentManager) {
-            document.querySelector('.create-subdepartment-block').style.display = 'block';
-            document.querySelector('.subdepartments-list-block').style.display = 'block';
-            document.querySelector('.department-employees-block').style.display = 'block';
-        }
     }
 
     /*

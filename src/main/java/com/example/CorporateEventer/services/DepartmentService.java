@@ -79,4 +79,8 @@ public class DepartmentService {
         departmentRepository.save(department);
     }
 
+    public Optional<Department> findByManagerId(Long managerId) {
+        return departmentRepository.findByManagerUserId(managerId);
+    }
+
 } 
