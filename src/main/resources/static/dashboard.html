@@ -15,9 +15,9 @@
             <button class="tab" data-target="section2">События</button>
             <button class="tab" data-target="section3">Мероприятия</button>
             <button class="tab" data-target="section4" 
-    th:if="${#authentication.principal.company.director == #authentication.principal or 
-           #authentication.principal.department != null or 
-           #authentication.principal.subDepartment != null}">
+            th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
+            #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0 or
+            #authentication.principal.roles.?[name == 'SUBDEPARTMENT_MANAGER']?.size() > 0}">
     Управление структурой
 </button>
         </div>
@@ -30,13 +30,14 @@
                 <!-- <p th:text="${company.director}">Директор: ${company.director.userId}</p> -->
                 <p th:text="${#authentication.principal.company.director}">Директор: ${#authentication.principal.company.director.userId}</p>
                 <p th:text="${#authentication.principal.userId}"></p>
+                <p th:text="${#authentication.principal.roles}"></p>
             </section>
             <section class="content grey-frame" id="section2">События</section>
             <section class="content grey-frame" id="section3">Мероприятия</section>
             <section class="content grey-frame" id="section4" 
-    th:if="${#authentication.principal.company.director == #authentication.principal or 
-           #authentication.principal.department != null or 
-           #authentication.principal.subDepartment != null}">
+            th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
+            #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0 or
+            #authentication.principal.roles.?[name == 'SUBDEPARTMENT_MANAGER']?.size() > 0}">
                 <div class="department-management">
                     <div class="section-header">
                         <h2>Управление структурой компании</h2>
@@ -44,7 +45,8 @@
                     </div>
             
                     <div class="management-container">
-                        <div class="create-department-block">
+                        <div class="create-department-block"
+                        th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0}">
                             <h3>Создание нового отдела</h3>
                             <form id="createDepartmentForm" class="department-form">
                                 <div class="form-group">
@@ -67,7 +69,8 @@
                             </form>
                         </div>
             
-                        <div class="departments-list-block">
+                        <div class="departments-list-block"
+                        th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0}">
                             <div class="block-header">
                                 <h3>Существующие отделы</h3>
                                 <p class="block-description">Список всех отделов компании и их руководителей</p>
@@ -75,7 +78,9 @@
                             <div class="departments-container">
                             </div>
                         </div>
-                        <div class="create-subdepartment-block" style="display: none;">
+                        <div class="create-subdepartment-block" style="display: none;"
+                        th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
+                                #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0}">
                             <div class="form-container">
                                 <h3>Создание подотдела</h3>
                                 <form id="createSubDepartmentForm" class="department-form">
@@ -101,7 +106,9 @@
                             </div>
                         </div>
                         
-                        <div class="subdepartments-list-block" style="display: none;">
+                        <div class="subdepartments-list-block" style="display: none;"
+                        th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
+                                #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0}">
                             <div class="block-header">
                                 <h3>Подотделы</h3>
                                 <p class="block-description">Список всех подотделов и их руководителей</p>
@@ -109,7 +116,9 @@
                             <div class="subdepartments-container"></div>
                         </div>
                         
-                        <div class="department-employees-block" style="display: none;">
+                        <div class="department-employees-block" style="display: none;"
+                        th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
+                                #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0}">
                             <div class="block-header">
                                 <h3>Управление сотрудниками отдела</h3>
                                 <p class="block-description">Назначайте и перемещайте сотрудников между отделами</p>
@@ -128,7 +137,10 @@
                             </div>
                         </div>
 
-                        <div class="subdepartment-employees-block" style="display: none;">
+                        <div class="subdepartment-employees-block" style="display: none;"
+                        th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
+                                #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0 or
+                                #authentication.principal.roles.?[name == 'SUBDEPARTMENT_MANAGER']?.size() > 0}">
                             <div class="block-header">
                                 <h3>Управление сотрудниками подотдела</h3>
                                 <p class="block-description">Управляйте составом подотдела</p>
@@ -196,5 +208,8 @@
     import EmployeeManager from '/java/employeeManager.js';
     const employeeManager = new EmployeeManager();
     window.employeeManager = employeeManager;
+</script>
+<script>
+    window.userRoles = /*[[${#authentication.principal.roles.?[name]}]]*/ [];
 </script>
 </html>

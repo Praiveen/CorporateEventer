@@ -19,15 +19,17 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
+    private final RoleRepository roleRepository;
     public AuthenticationService(
         UserRepository userRepository,
+        RoleRepository roleRepository,
         AuthenticationManager authenticationManager,
         PasswordEncoder passwordEncoder
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     public User signup(RegisterUserDto input) {
@@ -37,6 +39,10 @@ public class AuthenticationService {
             .setLastName(input.getLastName())
             .setEmail(input.getEmail())
             .setPassword(passwordEncoder.encode(input.getPassword()));
+
+        Role userRole = roleRepository.findByName(Role.USER)
+            .orElseThrow(() -> new RuntimeException("Default role not found"));
+        user.getRoles().add(userRole);
 
         return userRepository.save(user);
     }

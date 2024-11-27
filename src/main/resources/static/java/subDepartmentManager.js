@@ -54,9 +54,23 @@ export class SubDepartmentManager {
         this.setupSearchableSelect();
         await this.loadSubDepartments();
         this.setupEventListeners();
-        
-        document.querySelector('.create-subdepartment-block').style.display = 'block';
-        document.querySelector('.subdepartments-list-block').style.display = 'block';
+    
+        // Проверка ролей для отображения соответствующих блоков
+        this.checkUserRoles();
+    }
+
+    checkUserRoles() {
+        const userRoles = window.userRoles; // Теперь роли пользователя доступны в глобальной переменной
+    
+        const isDirector = userRoles.includes('DIRECTOR');
+        const isDepartmentManager = userRoles.includes('DEPARTMENT_MANAGER');
+        const isSubDepartmentManager = userRoles.includes('SUBDEPARTMENT_MANAGER');
+        console.log(isDepartmentManager);
+    
+        // Пример: показываем блоки в зависимости от ролей
+        if (isDepartmentManager || isSubDepartmentManager) {
+            document.querySelector('.subdepartment-employees-block').style.display = 'block';
+        }
     }
 
     async loadUsers() {

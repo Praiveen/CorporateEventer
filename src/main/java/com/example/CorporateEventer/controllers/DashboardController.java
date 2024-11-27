@@ -25,11 +25,13 @@ import com.example.CorporateEventer.dto.ResponseDto;
 import com.example.CorporateEventer.entities.Company;
 import com.example.CorporateEventer.entities.Department;
 import com.example.CorporateEventer.entities.Notification;
+import com.example.CorporateEventer.entities.Role;
 import com.example.CorporateEventer.entities.SubDepartment;
 import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.services.CompanyService;
 import com.example.CorporateEventer.services.DepartmentService;
 import com.example.CorporateEventer.services.NotificationService;
+import com.example.CorporateEventer.services.RoleService;
 import com.example.CorporateEventer.services.SubDepartmentService;
 import com.example.CorporateEventer.services.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,33 +51,38 @@ public class DashboardController {
     private DepartmentService departmentService;
     @Autowired
     private SubDepartmentService subDepartmentService;
+    @Autowired
+    private RoleService roleService;
 
 
     /*
      * Создание новой компании
      */
     @PostMapping("/starter/createCompany/newcompany")
-    public ResponseEntity<?> createCompany(@RequestBody Company company) {
+    public ResponseEntity<String> createCompany(@RequestBody Company company) {
         try {
             Authentication authentication = userService.userInfoFromSecurity();
             User currentUser = (User) authentication.getPrincipal();
             
-            User freshUser = userService.findById(currentUser.getUserId().intValue())
+            currentUser = userService.findById(currentUser.getUserId().intValue())
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
     
             company.setUsers(new ArrayList<>());
             company.setDepartments(new ArrayList<>());
     
-            company.setDirector(freshUser);
+            company.setDirector(currentUser);
             Company savedCompany = companyService.save(company);
+            // roleService.addRoleToUser(currentUser.getUserId(), Role.DIRECTOR);
+            roleService.changeUserRole(currentUser.getUserId(), Role.USER, Role.DIRECTOR);
+
+            currentUser.setCompany(savedCompany);
+            userService.save(currentUser);
     
-            freshUser.setCompany(savedCompany);
-            userService.save(freshUser);
+            savedCompany.getUsers().add(currentUser);
+            companyService.save(savedCompany);
     
-            savedCompany.getUsers().add(freshUser);
-            savedCompany = companyService.save(savedCompany);
-    
-            return ResponseEntity.ok("Успех");
+            
+            return ResponseEntity.ok("success");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -184,6 +191,9 @@ public class DashboardController {
             User user = notification.getSender();
             Company company = notification.getCompany();
             user.setCompany(company);
+
+            roleService.changeUserRole(user.getUserId(), Role.USER, Role.EMPLOYEE);
+
             userService.save(user);
 
             notification.setCompleted(true);
@@ -239,12 +249,12 @@ public class DashboardController {
             Notification notification = notificationService.findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Уведомление не найдено"));
             if (notification.isCompleted()) {
-                return ResponseEntity.badRequest().body(new ResponseDto("Заявка уже обработана", true));
+                return ResponseEntity.badRequest().body(new ResponseDto("Заявка уже обработа��а", true));
             }
             notification.setCompleted(true);
             notificationService.save(notification);
             
-            return ResponseEntity.ok(new ResponseDto("Уведомление помечено прочитанным", true));
+            return ResponseEntity.ok(new ResponseDto("Уведомление помечено проч��танным", true));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ResponseDto("Ошибка при отклонении заявки: " + e.getMessage(), true));
         }
@@ -276,6 +286,10 @@ public class DashboardController {
                 return dto;
             })
             .collect(Collectors.toList());
+
+        System.out.println("ssssssssssssssssssssssssssssssssssssssssss");
+        System.out.println(roleService.getUserRoles(currentUser.getUserId()));
+        
         return ResponseEntity.ok(availableUsers);
     }
 
@@ -308,6 +322,9 @@ public class DashboardController {
             department.setDepartmentName(departmentData.get("departmentName"));
             department.setCompany(currentUser.getCompany());
             department.setManager(head);
+
+            roleService.changeUserRole(head.getUserId(), Role.EMPLOYEE, Role.DEPARTMENT_MANAGER);
+
             
             departmentService.save(department);
             userService.save(head);
@@ -357,6 +374,11 @@ public class DashboardController {
     @PostMapping("/departments/delete/{departmentId}")
     public ResponseEntity<?> deleteDepartment(@PathVariable Long departmentId) {
         try {
+            Department department = departmentService.findById(departmentId)
+            .orElseThrow(() -> new RuntimeException("Отдел не найден"));
+        
+            roleService.changeUserRole(department.getManager().getUserId(), Role.DEPARTMENT_MANAGER, Role.EMPLOYEE);
+
             departmentService.deleteById(departmentId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
@@ -399,21 +421,27 @@ public class DashboardController {
             Department department = departmentService.findById(departmentId)
                 .orElseThrow(() -> new RuntimeException("Отдел не найден"));
                 
-            if (updateDTO.getHeadId() != null) {
-                User newManager = userService.findById(updateDTO.getHeadId().intValue())
-                    .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
-                    
-                if (newManager.getDepartment() != null || 
-                    newManager.getSubDepartment() != null || 
-                    (departmentService.isUserDepartmentManager(newManager) && 
-                     !department.getManager().equals(newManager)) || 
-                    subDepartmentService.isUserSubDepartmentManager(newManager)) {
-                    return ResponseEntity.badRequest()
-                        .body("Выбранный пользователь уже является менеджером или состоит в другом отделе/подотделе");
-                }
+                if (updateDTO.getHeadId() != null) {
+                    User newManager = userService.findById(updateDTO.getHeadId().intValue())
+                        .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+                    User oldManager = department.getManager();
+                        
+                    if (newManager.getDepartment() != null || 
+                        newManager.getSubDepartment() != null || 
+                        (departmentService.isUserDepartmentManager(newManager) && 
+                         !department.getManager().equals(newManager)) || 
+                        subDepartmentService.isUserSubDepartmentManager(newManager)) {
+                        return ResponseEntity.badRequest()
+                            .body("Выбранный пользователь уже является менеджером или состоит в другом отделе/подотделе");
+                    }
+
+                    roleService.changeUserRole(oldManager.getUserId(), Role.DEPARTMENT_MANAGER, Role.EMPLOYEE);
+                    roleService.changeUserRole(newManager.getUserId(), Role.EMPLOYEE, Role.DEPARTMENT_MANAGER);
+        
                 
-                department.setManager(newManager);
-            }
+                
+                    department.setManager(newManager);
+                }
             
             if (updateDTO.getDepartmentName() != null) {
                 department.setDepartmentName(updateDTO.getDepartmentName());
@@ -469,6 +497,8 @@ public class DashboardController {
             subdepartment.setSubdepartmentName(subdepartmentData.get("subdepartmentName"));
             subdepartment.setDepartment(parentDepartment);
             subdepartment.setManager(head);
+
+            roleService.changeUserRole(head.getUserId(), Role.EMPLOYEE, Role.SUBDEPARTMENT_MANAGER);
             
             subDepartmentService.save(subdepartment);
             
@@ -586,6 +616,10 @@ public class DashboardController {
                 Long headId = Long.parseLong(updateData.get("headId"));
                 User newManager = userService.findById(headId.intValue())
                     .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+
+                roleService.changeUserRole(subdepartment.getManager().getUserId(), Role.SUBDEPARTMENT_MANAGER, Role.EMPLOYEE);
+                roleService.changeUserRole(newManager.getUserId(), Role.EMPLOYEE, Role.SUBDEPARTMENT_MANAGER);
+        
                 subdepartment.setManager(newManager);
             }
             
@@ -603,6 +637,11 @@ public class DashboardController {
     @PostMapping("/departments/subdepartments/delete/{subdepartmentId}")
     public ResponseEntity<?> deleteSubDepartment(@PathVariable Long subdepartmentId) {
         try {
+            SubDepartment subdepartment = subDepartmentService.findById(subdepartmentId)
+                .orElseThrow(() -> new RuntimeException("Подотдел не найден"));
+        
+            roleService.changeUserRole(subdepartment.getManager().getUserId(), Role.SUBDEPARTMENT_MANAGER, Role.EMPLOYEE);
+            
             subDepartmentService.deleteById(subdepartmentId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
@@ -851,6 +890,44 @@ public class DashboardController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Ошибка при удалении сотрудников: " + e.getMessage());
+        }
+    }
+
+
+    @PostMapping("/access/grant-full/{userId}")
+    public ResponseEntity<?> grantFullAccess(@PathVariable Long userId) {
+        try {
+            Authentication authentication = userService.userInfoFromSecurity();
+            User currentUser = (User) authentication.getPrincipal();
+            
+            if (!currentUser.hasRole(Role.DIRECTOR)) {
+                return ResponseEntity.status(403).body("Только директор может назначать п��лный доступ");
+            }
+
+        roleService.changeUserRole(userId, null, Role.FULL_ACCESS);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ошибка при назначении полного доступа: " + e.getMessage());
+        }
+    }
+
+    /*
+     * Отзыв полного доступа
+     */
+    @PostMapping("/access/revoke-full/{userId}")
+    public ResponseEntity<?> revokeFullAccess(@PathVariable Long userId) {
+        try {
+            Authentication authentication = userService.userInfoFromSecurity();
+            User currentUser = (User) authentication.getPrincipal();
+            
+            if (!currentUser.hasRole(Role.DIRECTOR)) {
+                return ResponseEntity.status(403).body("Только директор может отзывать полный доступ");
+            }
+
+        roleService.changeUserRole(userId, Role.FULL_ACCESS, null);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ошибка при отзыве полного доступа: " + e.getMessage());
         }
     }
     

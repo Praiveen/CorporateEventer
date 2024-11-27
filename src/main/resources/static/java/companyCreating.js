@@ -1,9 +1,17 @@
 document.getElementById('createCompanyForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
+    const companyName = document.getElementById('companyName').value;
+    const address = document.getElementById('address').value;
+
+    if (!companyName || !address) {
+        alert('Пожалуйста, заполните все поля.');
+        return;
+    }
+
     const companyData = {
-        companyName: document.getElementById('companyName').value,
-        address: document.getElementById('address').value,
+        companyName: companyName,
+        address: address,
         users: [],
         departments: []
     };
@@ -17,14 +25,8 @@ document.getElementById('createCompanyForm').addEventListener('submit', function
     })
     .then(response => {
         if (!response.ok) {
-            return response.text().then(text => {
-                throw new Error(text || 'Ошибка при создании компании');
-            });
+            throw new Error('Ошибка при создании компании');
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Успех:', data);
         window.location.href = '/dashboard';
     })
     .catch(error => {
