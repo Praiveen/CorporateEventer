@@ -684,11 +684,13 @@ public class DashboardController {
                 SubDepartment subdepartment = subDepartmentService.findById(targetId)
                     .orElseThrow(() -> new RuntimeException("Подотдел не найден"));
                 
-                if (!currentUser.equals(currentUser.getCompany().getDirector()) && 
-                    !currentUser.equals(subdepartment.getDepartment().getManager()) &&
-                    !currentUser.equals(subdepartment.getManager())) {
+                    if (!currentUser.hasRole(Role.DIRECTOR) && 
+                    !currentUser.hasRole(Role.DEPARTMENT_MANAGER) && 
+                    !currentUser.hasRole(Role.SUBDEPARTMENT_MANAGER)) {
                     return ResponseEntity.status(403).body(null);
                 }
+
+
                 
                 availableUsers = subdepartment.getDepartment().getUsers().stream()
                 .filter(user -> 

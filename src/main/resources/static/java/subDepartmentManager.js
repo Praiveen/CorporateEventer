@@ -48,19 +48,10 @@ export class SubDepartmentManager {
 
     async loadManagerDepartment() {
         try {
-            console.log('Fetching manager department info...');
             const response = await fetch('/dashboard/current-user-department');
             if (!response.ok) throw new Error('Ошибка при загрузке информации об отделе');
-            
             const department = await response.json();
-            console.log('Received department info:', department);
-            
-            if (!department || !department.id) {
-                throw new Error('Не удалось получить ID отдела');
-            }
-            
             this.parentDepartmentId = department.id;
-            console.log('Set parentDepartmentId:', this.parentDepartmentId);
             
             // Показываем блоки для менеджера отдела
             const createBlock = document.querySelector('.create-subdepartment-block');
@@ -70,18 +61,11 @@ export class SubDepartmentManager {
             
             await this.initialize();
         } catch (error) {
-            console.error('Error in loadManagerDepartment:', error);
-            alert('Ошибка при загрузке информации об отделе');
+            console.error('Ошибка при загрузке информации об отделе:', error);
         }
     }
 
     async initialize() {
-        console.log('Initializing with parentDepartmentId:', this.parentDepartmentId);
-        if (!this.parentDepartmentId) {
-            console.error('No parentDepartmentId available');
-            return;
-        }
-        
         await this.loadUsers();
         await this.loadSubDepartments();
         this.setupEventListeners();
@@ -110,18 +94,15 @@ export class SubDepartmentManager {
 
     async loadUsers() {
         try {
-            console.log('Loading users for department:', this.parentDepartmentId);
             const response = await fetch(`/dashboard/departments/${this.parentDepartmentId}/available-managers`);
-            if (!response.ok) throw new Error('Ошибка при загрузке пользователей');
-            
             this.users = await response.json();
             this.updateUsersList(this.users);
-            
+    
             if (this.searchableSelect) {
                 this.searchableSelect.update(this.users);
             }
         } catch (error) {
-            console.error('Error loading users:', error);
+            console.error('Ошибка при загрузке пользователей:', error);
         }
     }
 
@@ -164,14 +145,13 @@ export class SubDepartmentManager {
 
     async loadSubDepartments() {
         try {
-            console.log('Loading subdepartments for department:', this.parentDepartmentId);
             const response = await fetch(`/dashboard/departments/${this.parentDepartmentId}/subdepartments`);
             if (!response.ok) throw new Error('Ошибка при загрузке подотделов');
             
             const subdepartments = await response.json();
             this.renderSubDepartments(subdepartments);
         } catch (error) {
-            console.error('Error loading subdepartments:', error);
+            console.error('Ошибка при загрузке подотделов:', error);
             this.subdepartmentsContainer.innerHTML = '<div class="error-message">Ошибка при загрузке подотделов</div>';
         }
     }

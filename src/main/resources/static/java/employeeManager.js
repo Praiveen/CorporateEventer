@@ -3,7 +3,34 @@ class EmployeeManager {
         this.currentDepartmentId = null;
         this.currentSubdepartmentId = null;
         this.initializeEventListeners();
+
+        if (window.userRoles.includes('DEPARTMENT_MANAGER')) {
+            this.loadManagerDepartment();
+        }
     }
+
+    async loadManagerDepartment() {
+        try {
+            const response = await fetch('/dashboard/current-user-department');
+            if (!response.ok) throw new Error('Ошибка при загрузке информации об отделе');
+            
+            const department = await response.json();
+            console.log('Received department info:', department);
+            
+            if (!department || !department.id) {
+                throw new Error('Не удалось получить ID отдела');
+            }
+            
+            this.currentDepartmentId = department.id;
+            console.log('Set currentDepartmentId:', this.currentDepartmentId);
+            
+            // После получения ID загружаем список сотрудников
+            await this.loadEmployeesList('department');
+        } catch (error) {
+            console.error('Error in loadManagerDepartment:', error);
+        }
+    }
+
 
     initializeEventListeners() {
         document.getElementById('addDepartmentEmployees')?.addEventListener('click', () => {
@@ -45,16 +72,46 @@ class EmployeeManager {
         modal.classList.add('show-modal');
         
         try {
-            const response = await fetch(`/dashboard/employees/available/${targetType}/${
-                targetType === 'department' ? this.currentDepartmentId : this.currentSubdepartmentId
-            }`);
+            let targetId;
+            if (targetType === 'department') {
+                targetId = this.currentDepartmentId;
+                console.log('Using department ID:', targetId);
+                
+                // Если ID не определен и пользователь - менеджер отдела, 
+                // попробуем получить ID отдела
+                if (!targetId && window.userRoles.includes('DEPARTMENT_MANAGER')) {
+                    console.log('Attempting to fetch department ID for manager...');
+                    const response = await fetch('/dashboard/current-user-department');
+                    if (!response.ok) throw new Error('Ошибка при загрузке информации об отделе');
+                    
+                    const department = await response.json();
+                    targetId = department.id;
+                    this.currentDepartmentId = targetId;
+                    console.log('Retrieved department ID:', targetId);
+                }
+            } else if (targetType === 'subdepartment') {
+                targetId = this.currentSubdepartmentId;
+                console.log('Using subdepartment ID:', targetId);
+            }
+    
+            if (!targetId) {
+                throw new Error('ID не определен');
+            }
+    
+            console.log(`Making request to: /dashboard/employees/available/${targetType}/${targetId}`);
+            const response = await fetch(`/dashboard/employees/available/${targetType}/${targetId}`);
             
-            if (!response.ok) throw new Error('Ошибка получения списка сотрудников');
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Server response:', errorText);
+                throw new Error('Ошибка получения списка сотрудников');
+            }
             
             const employees = await response.json();
             this.renderAvailableEmployees(employees, targetType);
         } catch (error) {
             console.error('Ошибка:', error);
+            alert('Произошла ошибка при загрузке списка сотрудников');
         }
     }
 
@@ -92,9 +149,18 @@ class EmployeeManager {
 
     async assignEmployee(employeeId, targetType) {
         try {
-            const response = await fetch(`/dashboard/employees/assign/${targetType}/${
-                targetType === 'department' ? this.currentDepartmentId : this.currentSubdepartmentId
-            }`, {
+            let targetId;
+            if (targetType === 'department') {
+                targetId = this.currentDepartmentId;
+            } else {
+                targetId = this.currentSubdepartmentId;
+            }
+    
+            if (!targetId) {
+                throw new Error('ID не определен');
+            }
+    
+            const response = await fetch(`/dashboard/employees/assign/${targetType}/${targetId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -106,6 +172,7 @@ class EmployeeManager {
     
             await this.loadEmployeesList(targetType);
             
+            // Обновляем списки после назначения
             if (window.departmentManager) {
                 await window.departmentManager.loadUsers();
                 await window.departmentManager.loadDepartments();
@@ -126,9 +193,8 @@ class EmployeeManager {
                 }
             }
     
-            const availableResponse = await fetch(`/dashboard/employees/available/${targetType}/${
-                targetType === 'department' ? this.currentDepartmentId : this.currentSubdepartmentId
-            }`);
+            // Обновляем список доступных сотрудников
+            const availableResponse = await fetch(`/dashboard/employees/available/${targetType}/${targetId}`);
             
             if (!availableResponse.ok) throw new Error('Ошибка получения списка сотрудников');
             
@@ -143,9 +209,18 @@ class EmployeeManager {
 
     async loadEmployeesList(targetType) {
         try {
-            const response = await fetch(`/dashboard/${targetType}s/${
-                targetType === 'department' ? this.currentDepartmentId : this.currentSubdepartmentId
-            }/employees`);
+            let targetId;
+            if (targetType === 'department') {
+                targetId = this.currentDepartmentId;
+            } else {
+                targetId = this.currentSubdepartmentId;
+            }
+
+            if (!targetId) {
+                throw new Error('ID не определен');
+            }
+
+            const response = await fetch(`/dashboard/${targetType}s/${targetId}/employees`);
 
             if (!response.ok) throw new Error('Ошибка получения списка сотрудников');
 
