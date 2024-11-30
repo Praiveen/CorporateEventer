@@ -1,6 +1,7 @@
 package com.example.CorporateEventer.services;
 
 import com.example.CorporateEventer.entities.Meeting;
+import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.repositories.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,9 @@ public class MeetingService {
 
     public void deleteById(Long id) {
         meetingRepository.deleteById(id);
+    }
+
+    public List<Meeting> findByParticipant(User participant) {
+        return meetingRepository.findByParticipantsContaining(participant);
     }
 } 

@@ -27,6 +27,11 @@ public class Event {
     private User createdBy;
 
     @ManyToMany
+    @JoinTable(
+        name = "event_participants",
+        joinColumns = @JoinColumn(name = "event_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private List<User> participants;
 }
 

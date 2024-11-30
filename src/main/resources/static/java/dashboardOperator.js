@@ -62,7 +62,7 @@ function loadNotifications() {
             container.innerHTML = '';
 
             if (notifications.length === 0) {
-                container.innerHTML = '<p>Нет новых уведомлений</p>';
+                container.innerHTML = '<p class="notification-not-message">Нет новых уведомлений</p>';
                 return;
             }
 

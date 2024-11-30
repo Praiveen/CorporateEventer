@@ -57,13 +57,6 @@ public class AuthenticationController {
         return ResponseEntity.ok("Аккаунт зарегестрирован, теперь можно в него войти!");
     }
 
-    @PostMapping("path")
-    public String postMethodName(@RequestBody String entity) {
-        //TODO: process POST request
-        
-        return entity;
-    }
-    
 
     // @PostMapping(value = "/regSave", consumes = "application/x-www-form-urlencoded")
     // public String addNewUser(@ModelAttribute("userReg") @Valid User user, BindingResult result, Model model) {

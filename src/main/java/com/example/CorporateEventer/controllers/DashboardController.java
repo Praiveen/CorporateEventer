@@ -73,16 +73,13 @@ public class DashboardController {
     
             company.setDirector(currentUser);
             Company savedCompany = companyService.save(company);
-            // roleService.addRoleToUser(currentUser.getUserId(), Role.DIRECTOR);
             roleService.changeUserRole(currentUser.getUserId(), Role.USER, Role.DIRECTOR);
 
             currentUser.setCompany(savedCompany);
             userService.save(currentUser);
-    
             savedCompany.getUsers().add(currentUser);
             companyService.save(savedCompany);
-    
-            
+
             return ResponseEntity.ok("success");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -199,10 +196,6 @@ public class DashboardController {
 
             notification.setCompleted(true);
             notificationService.save(notification);
-
-            // company.getUsers().add(user);
-            // companyService.save(company);
-
             return ResponseEntity.ok(new ResponseDto("Заявка успешно принята", true));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ResponseDto("Ошибка при принятии заявки: " + e.getMessage(), true));
@@ -288,9 +281,6 @@ public class DashboardController {
             })
             .collect(Collectors.toList());
 
-        System.out.println("ssssssssssssssssssssssssssssssssssssssssss");
-        System.out.println(roleService.getUserRoles(currentUser.getUserId()));
-        
         return ResponseEntity.ok(availableUsers);
     }
 

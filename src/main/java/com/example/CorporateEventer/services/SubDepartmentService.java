@@ -1,5 +1,6 @@
 package com.example.CorporateEventer.services;
 
+import com.example.CorporateEventer.entities.Department;
 import com.example.CorporateEventer.entities.SubDepartment;
 import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.repositories.SubDepartmentRepository;
@@ -38,4 +39,10 @@ public class SubDepartmentService {
     public SubDepartment findByManager(User currentUser) {
         return subDepartmentRepository.findByManager(currentUser);
     }
+
+
+    // public Optional<SubDepartment> findByManagerId(Long managerId) {
+    //     return subDepartmentRepository.findByManagerUserId(managerId);
+    // }
+
 }

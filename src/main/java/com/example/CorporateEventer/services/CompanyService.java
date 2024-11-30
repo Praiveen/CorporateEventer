@@ -27,10 +27,6 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    // public User addUsersUser(User user){
-    //     return companyRepository.addUsersUser(user);
-    // }
-
     public void deleteById(Long directorId) {
         companyRepository.deleteById(directorId);
     }

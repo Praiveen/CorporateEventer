@@ -8,21 +8,24 @@
     <title>CorpoEventer - Панель</title>
  </head>
  <body id="Topic1">
-    <header th:replace = "~{headerDashboard}" class="gridsp-1-16"></header>
+    <header th:replace = "~{headerDashboard}"></header>
     
-    <main class="gridsp-1-16 grey-frame">
+    <main class="gridsp-1-18 grey-frame">
         <article>
-            <form id="createCompanyForm">
-                <div>
-                    <label for="companyName">Название компании:</label>
-                    <input type="text" id="companyName" required />
-                </div>
-                <div>
-                    <label for="address">Адрес:</label>
-                    <input type="text" id="address" required />
-                </div>
-                <button type="submit">Создать компанию</button>
-            </form>
+            <div class="box">
+                <form id="createCompanyForm">
+                    <div>
+                        <label for="companyName">Название компании:</label>
+                        <input type="text" id="companyName" required placeholder="Введите название компании" />
+                    </div>
+                    <div>
+                        <label for="address">Адрес:</label>
+                        <input type="text" id="address" required placeholder="Введите адрес компании" />
+                    </div>
+                    <button type="submit">Создать компанию</button>
+                </form>
+            </div>
+            
 
             
         </article>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en"buttonSpecial>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initialscale=1.0">
+    <header th:replace="~{linksDashboard}"></header> 
+
+    <title>CorpoEventer - Панель</title>
+ </head>
+ <body id="Topic1">
+    <header th:replace = "~{headerDashboard}" ></header>
+    
+    <main class="gridsp-1-15 grey-frame mrgn-all03-grey-frame flex-dir-col">
+        <article class="back-link">
+            <a href="/dashboard">
+                <i class="fas fa-arrow-left"></i>
+                На главную
+            </a>
+        </article>
+        <article class="flex1 profile profile-container">
+            <div class="profile-header">
+                <h1>Личный кабинет</h1>
+                <p>Управление личными данными</p>
+            </div>
+    
+            <form id="profileForm" class="profile-form">
+                <div class="field-wrapper">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" disabled>
+                </div>
+    
+                <div class="field-wrapper">
+                    <label for="firstName">Имя</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+    
+                <div class="field-wrapper">
+                    <label for="lastName">Фамилия</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+    
+                <div class="field-wrapper">
+                    <label for="phone">Телефон</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+    
+                <div class="field-wrapper">
+                    <label for="company">Компания</label>
+                    <input type="text" id="company" name="company" disabled>
+                </div>
+    
+                <div class="field-wrapper">
+                    <label for="department">Отдел</label>
+                    <input type="text" id="department" name="department" disabled>
+                </div>
+
+                <div class="field-wrapper">
+                    <label for="department">Рабочая группа</label>
+                    <input type="text" id="subDepartment" name="subDepartment" disabled>
+                </div>
+    
+                <div class="field-wrapper">
+                    <label for="role">Роль</label>
+                    <input type="text" id="role" name="role" disabled>
+                </div>
+    
+                <button type="submit" class="update-btn">Обновить данные</button>
+            </form>
+    
+            <div id="statusMessage" class="status-message" style="display: none;"></div>
+        </article>
+    </main>
+    <aside class="gridsp-16-3 mrgn-lft0-grey-frame grey-frame">
+        <h2>Панель уведомлений</h2>
+        <div id="notifications-container" class="notification-container">
+        </div>
+    </aside>
+ </body>
+
+<script src="/java/headerSlider.js"></script>
+<script src="/java/profileLoader.js"></script>
+<script src="/java/dashboardOperator.js"></script>
+
+</html>

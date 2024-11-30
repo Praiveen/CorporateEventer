@@ -37,9 +37,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((requests) -> requests
                                 .requestMatchers("/login").anonymous()
                                 .requestMatchers("/register").anonymous()
-                                .requestMatchers("/user_page").authenticated()
-                                // .requestMatchers("/admin").hasRole("ADMIN")
-                                // .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/profile").authenticated()
                                 .requestMatchers("/css/**", "/js/**").permitAll()
                                 .requestMatchers("/**").permitAll()
                                 .requestMatchers("/").permitAll()
@@ -51,45 +49,15 @@ public class SecurityConfiguration {
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-                // .logout()
-                // .logoutSuccessHandler((req, res, auth) -> tokenBlacklistService.addToBlacklist(req.getHeader("Authorization")))
-                // .permitAll();
-
-
         return http.build();
     }
-
-    // @Bean
-    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    //     http.csrf()
-    //             .disable()
-    //             .authorizeHttpRequests()
-    //             .requestMatchers("/auth/**")
-    //             .permitAll()
-    //             .anyRequest()
-    //             .authenticated()
-    //             .and()
-    //             .sessionManagement()
-    //             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    //             .and()
-    //             .authenticationProvider(authenticationProvider)
-    //             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-    //     return http.build();
-    // }
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        // configuration.setAllowedOrigins(List.of("http://localhost:8005"));
         configuration.setAllowedMethods(List.of("GET","POST"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
         source.registerCorsConfiguration("/**",configuration);
-
         return source;
     }
 }

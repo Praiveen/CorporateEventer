@@ -4,13 +4,11 @@ class EmployeeManager {
         this.currentSubdepartmentId = null;
         this.initializeEventListeners();
     
-        // Показываем панель управления для менеджера подотдела
         if (window.userRoles.includes('SUBDEPARTMENT_MANAGER')) {
             const subdepartmentEmployeesBlock = document.querySelector('.subdepartment-employees-block');
             if (subdepartmentEmployeesBlock) {
                 subdepartmentEmployeesBlock.style.display = 'block';
             }
-            // Получаем ID подотдела для менеджера
             fetch('/dashboard/current-user-subdepartment')
                 .then(response => {
                     console.log('Response status:', response.status);
@@ -27,7 +25,6 @@ class EmployeeManager {
                 .catch(error => console.error('Error fetching subdepartment:', error));
         }
     
-        // Существующая логика для менеджера отдела
         if (window.userRoles.includes('DEPARTMENT_MANAGER')) {
             this.loadManagerDepartment();
         }
@@ -48,7 +45,6 @@ class EmployeeManager {
             this.currentDepartmentId = department.id;
             console.log('Set currentDepartmentId:', this.currentDepartmentId);
             
-            // После получения ID загружаем список сотрудников
             await this.loadEmployeesList('department');
         } catch (error) {
             console.error('Error in loadManagerDepartment:', error);
@@ -110,7 +106,6 @@ class EmployeeManager {
                 console.log('Using department ID:', targetId);
             } else if (targetType === 'subdepartment') {
                 targetId = this.currentSubdepartmentId;
-                console.log('Using subdepartment ID:', targetId);
             }
     
             if (!targetId) {
@@ -123,7 +118,6 @@ class EmployeeManager {
                 throw new Error('ID не определен');
             }
     
-            console.log(`Making request to: /dashboard/employees/available/${targetType}/${targetId}`);
             const response = await fetch(`/dashboard/employees/available/${targetType}/${targetId}`);
             
             if (!response.ok) {
@@ -135,7 +129,6 @@ class EmployeeManager {
             const employees = await response.json();
             this.renderAvailableEmployees(employees, targetType);
         } catch (error) {
-            console.error('Ошибка:', error);
             alert('Произошла ошибка при загрузке списка сотрудников');
         }
     }
@@ -197,7 +190,6 @@ class EmployeeManager {
     
             await this.loadEmployeesList(targetType);
             
-            // Обновляем списки после назначения
             if (window.departmentManager) {
                 await window.departmentManager.loadUsers();
                 await window.departmentManager.loadDepartments();
@@ -218,7 +210,6 @@ class EmployeeManager {
                 }
             }
     
-            // Обновляем список доступных сотрудников
             const availableResponse = await fetch(`/dashboard/employees/available/${targetType}/${targetId}`);
             
             if (!availableResponse.ok) throw new Error('Ошибка получения списка сотрудников');

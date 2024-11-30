@@ -47,7 +47,6 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = true)
-    // @JsonBackReference("company-users")  
     private Company company;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -71,6 +70,9 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
+    
+    @ManyToMany(mappedBy = "participants")
+    private List<Event> participatingEvents;
 
 
     public boolean hasRole(String roleName) {

@@ -68,12 +68,8 @@ public class DepartmentService {
             if (otherDepartment != null && !otherDepartment.getDepartmentId().equals(departmentId)) {
                 throw new RuntimeException("Выбранный сотрудник уже является руководителем другого отдела");
             }
-
-            // User oldManager = department.getManager();
-            // oldManager.setManagedDepartment(null);
             
             department.setManager(newManager);
-            // newManager.setManagedDepartment(department);
         }
 
         departmentRepository.save(department);

@@ -4,7 +4,6 @@ import com.example.CorporateEventer.entities.Company;
 import com.example.CorporateEventer.entities.Notification;
 import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.repositories.NotificationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

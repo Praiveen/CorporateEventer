@@ -18,23 +18,154 @@
             th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
             #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0 or
             #authentication.principal.roles.?[name == 'SUBDEPARTMENT_MANAGER']?.size() > 0}">
-    Управление структурой
-</button>
+                Создание событий и мероприятий
+            </button>
+            <button class="tab" data-target="section5" 
+            th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
+            #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0 or
+            #authentication.principal.roles.?[name == 'SUBDEPARTMENT_MANAGER']?.size() > 0}">
+                Управление структурой
+            </button>
         </div>
     </aside>
     <main class="flex1 gridsp-3-13">
         <article class="slider-content flex1">
             <section class="content flex1 grey-frame" id="section1">
-                <!-- <h2 th:text="${company.companyName}">Календарь</h2> -->
-                <!-- <p th:text="${company.address}">Адрес компании</p> -->
-                <!-- <p th:text="${company.director}">Директор: ${company.director.userId}</p> -->
-                <p th:text="${#authentication.principal.company.director}">Директор: ${#authentication.principal.company.director.userId}</p>
-                <p th:text="${#authentication.principal.userId}"></p>
-                <p th:text="${#authentication.principal.roles}"></p>
+                <div id="calendar">
+                    <div class="header">
+                      <button id="prev">←</button>
+                      <h1 id="month-year"></h1>
+                      <button id="next">→</button>
+                    </div>
+                    <div class="weekdays">
+                      <div>Понедельник</div>
+                      <div>Вторник</div>
+                      <div>Среда</div>
+                      <div>Четверг</div>
+                      <div>Пятница</div>
+                      <div>Суббота</div>
+                      <div>Воскресенье</div>
+                    </div>
+                    <div id="days" class="days"></div>
+                  </div>
             </section>
-            <section class="content grey-frame" id="section2">События</section>
-            <section class="content grey-frame" id="section3">Мероприятия</section>
+            <section class="content grey-frame" id="section2">
+                <h2>Текущие события</h2>
+                <div class="current-events">
+                </div>
+                <div class="past-events">
+                </div>
+            </section>
+            <section class="content grey-frame" id="section3">
+                <h2>Текущие встречи</h2>
+                <div class="current-meetings">
+                </div>
+        
+                <div class="past-meetings">
+                </div>
+            </section>
+            
             <section class="content grey-frame" id="section4" 
+            th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
+            #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0 or
+            #authentication.principal.roles.?[name == 'SUBDEPARTMENT_MANAGER']?.size() > 0}">
+                <div class="event-creation-container">
+                    <div class="section-header">
+                        <h2>Создание событий и мероприятий</h2>
+                        <p class="section-description">Создавайте события и мероприятия для сотрудников</p>
+                    </div>
+
+                    <div class="forms-container">
+                        <div class="create-event-block">
+                            <h3>Создание события</h3>
+                            <form id="createEventForm" class="event-form">
+                                <div class="form-group">
+                                    <label for="eventTitle">Название события:</label>
+                                    <input type="text" id="eventTitle" name="eventTitle" required class="form-input">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="eventDescription">Описание:</label>
+                                    <textarea id="eventDescription" name="eventDescription" class="form-input"></textarea>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="eventStartTime">Начало:</label>
+                                        <input type="datetime-local" id="eventStartTime" name="eventStartTime" required class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="eventEndTime">Окончание:</label>
+                                        <input type="datetime-local" id="eventEndTime" name="eventEndTime" required class="form-input">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="eventLocation">Место проведения:</label>
+                                    <input type="text" id="eventLocation" name="eventLocation" required class="form-input">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Отправить:</label>
+                                    <button type="button" class="btn-select-recipients" data-form-type="event">
+                                        <i class="fas fa-building"></i> Выбрать получателей
+                                    </button>
+                                    <div class="selected-recipients-container">
+                                        <!-- Здесь будут отображаться выбранные отделы/подотделы -->
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">
+                                        <i class="fas fa-plus"></i> Создать событие
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="create-meeting-block">
+                            <h3>Создание мероприятия</h3>
+                            <form id="createMeetingForm" class="meeting-form">
+                                <div class="form-group">
+                                    <label for="meetingTopic">Тема:</label>
+                                    <input type="text" id="meetingTopic" name="meetingTopic" required class="form-input">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="meetingAgenda">Повестка:</label>
+                                    <textarea id="meetingAgenda" name="meetingAgenda" class="form-input"></textarea>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="meetingStartTime">Начало:</label>
+                                        <input type="datetime-local" id="meetingStartTime" name="meetingStartTime" required class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="meetingEndTime">Окончание:</label>
+                                        <input type="datetime-local" id="meetingEndTime" name="meetingEndTime" required class="form-input">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Получатели:</label>
+                                    <button type="button" class="btn-select-recipients" data-form-type="event">
+                                        <i class="fas fa-users"></i> Выбрать получателей
+                                    </button>
+                                    <div class="selected-recipients-container">
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">
+                                        <i class="fas fa-plus"></i> Создать мероприятие
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="content grey-frame" id="section5" 
             th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
             #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0 or
             #authentication.principal.roles.?[name == 'SUBDEPARTMENT_MANAGER']?.size() > 0}">
@@ -164,12 +295,11 @@
                     
                 </div>
             </section>
-
         </article>
     </main>
     <aside class="gridsp-16-3 mrgn-lft0-grey-frame grey-frame">
         <h2>Панель уведомлений</h2>
-        <div id="notifications-container">
+        <div id="notifications-container" class="notification-container">
         </div>
     </aside>
 
@@ -198,6 +328,20 @@
         </div>
     </div>
 
+    <div id="recipientsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Добавление получателей</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="recipientSearch" class="search-input" placeholder="Поиск получателей...">
+                <div class="recipients-list">
+                </div>
+            </div>
+        </div>
+    </div>
+
  </body>
  <script type="module" src="/java/departmentManager.js"></script>
  <script type="module" src="/java/subDepartmentManager.js"></script>
@@ -212,4 +356,8 @@
 <script th:inline="javascript">
     window.userRoles = /*[[${#authentication.principal.roles.![name]}]]*/ [];
 </script>
+<script type="module" src="/java/eventManager.js"></script>
+<script src="/java/currentUserEvents.js"></script>
+<script src="/java/currentUserMeetings.js"></script>
+<script src="/java/calendar.js"></script>
 </html>
