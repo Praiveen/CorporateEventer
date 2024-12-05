@@ -164,7 +164,7 @@ class EventManager {
         };
     
         try {
-            const response = await fetch(`/event/create-event/${type}/${id}`, {
+            const response = await fetch(`/event/createEvent/${type}/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

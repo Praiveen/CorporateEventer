@@ -61,6 +61,9 @@ public class EventController {
 
 
 
+    /*
+     * Лист отделов и подотделов для создания мероприятия и события
+     */
     @GetMapping("/available-recipients")
     public ResponseEntity<Map<String, List<Map<String, Object>>>> getAvailableRecipients() {
         try {
@@ -139,11 +142,17 @@ public class EventController {
                 Department dept = departmentService.findById(id)
                     .orElseThrow(() -> new RuntimeException("Отдел не найден"));
                 participants.addAll(dept.getUsers());
+                if (dept.getManager() != null) {
+                    participants.add(dept.getManager());
+                }
             } 
             else if ("subdepartment".equals(type)) {
                 SubDepartment subDept = subDepartmentService.findById(id)
                     .orElseThrow(() -> new RuntimeException("Подотдел не найден"));
                 participants.addAll(subDept.getUsers());
+                if (subDept.getManager() != null) {
+                    participants.add(subDept.getManager());
+                }
             }
             event.setParticipants(participants);
             for (User participant : participants) {
@@ -238,11 +247,17 @@ public class EventController {
                 Department dept = departmentService.findById(id)
                     .orElseThrow(() -> new RuntimeException("Отдел не найден"));
                 participants.addAll(dept.getUsers());
+                if (dept.getManager() != null) {
+                    participants.add(dept.getManager());
+                }
             } 
             else if ("subdepartment".equals(type)) {
                 SubDepartment subDept = subDepartmentService.findById(id)
                     .orElseThrow(() -> new RuntimeException("Подотдел не найден"));
                 participants.addAll(subDept.getUsers());
+                if (subDept.getManager() != null) {
+                    participants.add(subDept.getManager());
+                }
             }
             
             meeting.setParticipants(participants);

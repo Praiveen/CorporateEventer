@@ -47,12 +47,8 @@ a{
 
 body{
 	background-color: #424347;
-	/* margin: 0 auto; */
-	/* padding: 0; */
-	/* display: grid; */
-	/* grid-template-rows: 1fr auto auto auto auto; */
-	/* grid-template-columns: repeat(16, 1fr); */
 }
+
 
 
 
@@ -216,22 +212,94 @@ nav{
 	}
 }
 
+/* главная основа */
+
+
+.contentMainPage {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.contentMainPage h1 {
+    text-align: center;
+    color: #14769a;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.gallery-item {
+    text-align: center;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: translateY(-10px);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.gallery-item h3 {
+    color: #14769a;
+    margin-bottom: 0.5rem;
+}
+
+.gallery-item p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.description {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.description-block {
+    text-align: center;
+}
+
+.description-block h2 {
+    color: #14769a;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.description-block p {
+    color: #666;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .image-gallery,
+    .description {
+        grid-template-columns: 1fr;
+    }
+}
 
 
 
-
-
-
-
-/* формы входа */
-
-
-
-
-
-
-
-
+/* футр */
 
 
 footer{

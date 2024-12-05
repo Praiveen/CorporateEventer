@@ -3,6 +3,7 @@ package com.example.CorporateEventer.controllers;
 
 import com.example.CorporateEventer.dto.LoginUserDto;
 import com.example.CorporateEventer.dto.RegisterUserDto;
+import com.example.CorporateEventer.dto.ResponseDto;
 import com.example.CorporateEventer.entities.*;
 import com.example.CorporateEventer.services.*;
 
@@ -30,31 +31,28 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    // @PostMapping("/signup")
-    // public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
-    //     User registeredUser = authenticationService.signup(registerUserDto);
-
-    //     return ResponseEntity.ok(registeredUser);
-    // }
-
     /*
      * Обработка регистрации
      */
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto) {
         if (!registerUserDto.getPassword().equals(registerUserDto.getPasswordConfirm())) {
-            return ResponseEntity.badRequest().body("Пароли не совпадают");
+            return ResponseEntity.badRequest()
+                .body(new ResponseDto("Пароли не совпадают", false));
         }
         if (registerUserDto.getPassword().length() < 5) {
-            return ResponseEntity.badRequest().body("Пароль должен содержать минимум 5 символов");
+            return ResponseEntity.badRequest()
+                .body(new ResponseDto("Пароль должен содержать минимум 5 символов", false));
         }
         if (!authenticationService.saveUser(registerUserDto)) {
-            System.out.println("Уже есть");
-            return ResponseEntity.badRequest().body("Пользователь с такой почтой уже зарегистрирован");
+            return ResponseEntity.badRequest()
+                .body(new ResponseDto("Пользователь с такой почтой уже зарегистрирован", false));
         }
         
         User registeredUser = authenticationService.signup(registerUserDto);
-        return ResponseEntity.ok("Аккаунт зарегестрирован, теперь можно в него войти!");
+        return ResponseEntity.ok(
+            new ResponseDto("Аккаунт зарегистрирован, теперь можно в него войти!", true)
+        );
     }
 
 

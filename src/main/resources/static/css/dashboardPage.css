@@ -239,12 +239,12 @@ button {
     padding: 10px;
     border-radius: 5px;
     border: none;
-    background-color: #14769a; /* Цвет кнопки */
+    background-color: #14769a;
     color: white;
     cursor: pointer;
 }
 button:hover {
-    background-color: #144a6a; /* Цвет кнопки при наведении */
+    background-color: #144a6a;
 }
 
 
@@ -267,6 +267,15 @@ button:hover {
 .box form input::placeholder {
     color: #adb5bd;
 }
+
+
+.back-link-container {
+    position: absolute;
+    top: 30px;
+    left: 10px;
+}
+
+
 
 /* слайдер */
 
@@ -297,7 +306,7 @@ button:hover {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s, color 0.3s;
-    color: #333;
+    color: #000000;
 }
 
 .tab.active {
@@ -421,21 +430,30 @@ button:hover {
     gap: 5px;
 }
 
-.notification-actions button {
+/* .notification-actions button {
     max-width: 85px;
-
     padding: 5px 5px;
     border-radius: 4px;
     border: none;
     cursor: pointer;
-}
+} */
 
-.notification-actions button:first-child {
+.accept-button {
+    max-width: 85px;
+    padding: 5px 5px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
     background-color: #28a745;
     color: white;
 }
 
-.notification-actions button:last-child {
+.reject-button {
+    max-width: 85px;
+    padding: 5px 5px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
     background-color: #dc3545;
     color: white;
 }
@@ -443,6 +461,35 @@ button:hover {
 
 .notification-container .notification-not-message{
     color:#6cd6b8
+}
+
+
+.readNotification {
+    background-color: rgba(255, 200, 0, 0.8);
+    border: 2px solid #FFA500;
+    color: #000;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(
+        0 0,                   
+        calc(100% - 10px) 0,    
+        100% 10px,              
+        100% 100%,              
+        10px 100%,              
+        0 calc(100% - 10px)
+    );
+}
+
+.readNotification:hover {
+    background-color: rgba(255, 180, 0, 0.9); /* Немного темнее при наведении */
+    transform: translateY(-2px);
+}
+
+.readNotification:active {
+    transform: translateY(0);
 }
 
 /* селектор пользователей на странице редактирования */
@@ -1334,6 +1381,7 @@ textarea.form-input {
 .current-events, .past-events, .current-meetings, .past-meetings {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 15px;
     padding: 20px 15px;
 }
@@ -1345,7 +1393,8 @@ textarea.form-input {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
     width: 100%;
-    max-width: 250px;
+    flex: 1 1 250px;
+    max-width: 240px;
 }
 
 .event-card:hover {
@@ -1614,7 +1663,7 @@ textarea.form-input {
 
 
 
-
+/* календарь */
 
 
 
@@ -1632,72 +1681,94 @@ textarea.form-input {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: #007bff;
+    padding: 0.3rem;
+    background-color: #4ba0fa;
     color: white;
     border-radius: 5px 5px 0 0;
-  }
-  
-  .header button {
+}
+
+.header button {
     background: none;
     border: none;
     color: white;
     font-size: 20px;
     cursor: pointer;
-  }
-  
-  .header button:hover {
+}
+
+.header button:hover {
     color: #ffcc00;
-  }
-  .header h1 {
+}
+.header h1 {
     margin: 0;
     font-size: 24px;
-  }
-  
-  .weekdays {
+}
+
+.weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
     background-color: #f1f1f1;
     padding: 10px 0;
     font-weight: bold;
-  }
-  
-  .days {
+}
+
+.days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-auto-rows: 1fr;
-    gap: 1px;
-    background-color: #ddd;
+    background-color: #8a8a8a;
     flex-grow: 1;
-  }
-  
-  .days div {
+    border-radius: 5px;
+}
+
+.days div {
     background: white;
     display: flex;
     flex-direction: column;
-    border: 1px solid #ddd;
-    padding: 5px;
+    /* border: 1px solid #ddd; */
+    padding: 2px;
+    margin: 1px;
     font-size: 14px;
     position: relative;
-  }
-  
-  .days div .day-number {
+    border-radius: 5px;
+}
+
+.days div .day-number {
+    border: 0;
+    border-bottom: 1px solid #ddd;
     font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .days div .tasks {
+    margin-bottom: 3px;
+}
+
+.days div .tasks {
+    padding: 0;
+    border: 0;
     font-size: 12px;
-    color: #555;
-  }
-  
-  .days div:hover {
-    background-color: #f1faff;
+    color: rgb(0, 0, 0)
+}
+
+
+.task {
+    margin: 2px 0 2px 3px;
+    border-radius: 3px;
+}
+
+.event-task {
+    border-left: 5px solid #3ca940;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.meeting-task {
+    border-left: 5px solid #f32121;
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.days div:hover {
+    background-color: #f9fdff;
     cursor: pointer;
-  }
-  
-  .days .today {
+}
+
+.days .today {
     background-color: #ffeb99;
     border: 2px solid #ffaa00;
-  }
+}

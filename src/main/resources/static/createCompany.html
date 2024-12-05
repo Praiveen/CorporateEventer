@@ -10,7 +10,13 @@
  <body id="Topic1">
     <header th:replace = "~{headerDashboard}"></header>
     
-    <main class="gridsp-1-18 grey-frame">
+    <main class="gridsp-1-18 grey-frame flex-dir-col">
+        <article class="back-link-container back-link">
+            <a href="/dashboard/starter" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Назад
+            </a>
+        </article>
         <article>
             <div class="box">
                 <form id="createCompanyForm">

@@ -90,7 +90,7 @@ function createNotificationElement(notification) {
                 Дата: ${formatDate(notification.sendDate)}
             </p>
             <div class="notification-actions">
-                <button onclick="readRequest(${notification.id})">Отметить прочитанным</button>
+                <button class="readNotification" onclick="readRequest(${notification.id})">Отметить прочитанным</button>
             </div>
         </div>
         `;
@@ -105,8 +105,8 @@ function createNotificationElement(notification) {
                 Дата: ${formatDate(notification.sendDate)}
             </p>
             <div class="notification-actions">
-                <button onclick="acceptRequest(${notification.id})">Принять</button>
-                <button onclick="rejectRequest(${notification.id})">Отклонить</button>
+                <button class="accept-button" onclick="acceptRequest(${notification.id})">Принять</button>
+                <button class="reject-button" onclick="rejectRequest(${notification.id})">Отклонить</button>
             </div>
         </div>
         `;

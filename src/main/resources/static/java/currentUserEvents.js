@@ -10,8 +10,34 @@ class CurrentUserEvents {
             
             const events = await response.json();
             this.renderEvents(events);
+            
+            // Добавляем события в календарь
+            this.updateCalendarEvents(events);
         } catch (error) {
             console.error('Error loading events:', error);
+        }
+    }
+
+    updateCalendarEvents(events) {
+        const calendarTasks = window.calendarTasks || {};
+        
+        events.currentEvents.forEach(event => {
+            const date = new Date(event.startTime);
+            const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            
+            if (!calendarTasks[dateKey]) {
+                calendarTasks[dateKey] = [];
+            }
+            calendarTasks[dateKey].push({
+                title: event.title,
+                type: 'event'
+            });
+        });
+        
+        window.calendarTasks = calendarTasks;
+        
+        if (window.refreshCalendar) {
+            window.refreshCalendar();
         }
     }
 

@@ -111,7 +111,6 @@
                                         <i class="fas fa-building"></i> Выбрать получателей
                                     </button>
                                     <div class="selected-recipients-container">
-                                        <!-- Здесь будут отображаться выбранные отделы/подотделы -->
                                     </div>
                                 </div>
 
@@ -213,16 +212,16 @@
                         th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
                                 #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0}">
                             <div class="form-container">
-                                <h3>Создание подотдела</h3>
+                                <h3>Создание рабочей группы</h3>
                                 <form id="createSubDepartmentForm" class="department-form">
                                     <div class="form-group">
-                                        <label for="subdepartmentName">Название подотдела:</label>
+                                        <label for="subdepartmentName">Название рабочей группы:</label>
                                         <input type="text" id="subdepartmentName" name="subdepartmentName" 
-                                               placeholder="Введите название подотдела" required class="form-input">
+                                               placeholder="Введите название рабочей группы" required class="form-input">
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label for="subDepartmentHead">Руководитель подотдела:</label>
+                                        <label for="subDepartmentHead">Руководитель рабочей группы:</label>
                                         <select id="subDepartmentHead" name="subDepartmentHead" required class="form-select">
                                             <option value="">Выберите руководителя</option>
                                         </select>
@@ -230,7 +229,7 @@
                         
                                     <div class="form-actions">
                                         <button type="submit" class="btn-primary">
-                                            <i class="fas fa-plus"></i> Создать подотдел
+                                            <i class="fas fa-plus"></i> Создать рабочую группу
                                         </button>
                                     </div>
                                 </form>
@@ -241,8 +240,8 @@
                         th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
                                 #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0}">
                             <div class="block-header">
-                                <h3>Подотделы</h3>
-                                <p class="block-description">Список всех подотделов и их руководителей</p>
+                                <h3>Рабочие группы</h3>
+                                <p class="block-description">Список всех рабочих групп и их руководителей</p>
                             </div>
                             <div class="subdepartments-container"></div>
                         </div>
@@ -273,13 +272,13 @@
                                 #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0 or
                                 #authentication.principal.roles.?[name == 'SUBDEPARTMENT_MANAGER']?.size() > 0}">
                             <div class="block-header">
-                                <h3>Управление сотрудниками подотдела</h3>
-                                <p class="block-description">Управляйте составом подотдела</p>
+                                <h3>Управление сотрудниками рабочей группы</h3>
+                                <p class="block-description">Управляйте составом рабочей группы</p>
                             </div>
                             
                             <div class="employees-management">
                                 <div class="employees-header">
-                                    <div class="employees-title">Сотрудники подотдела</div>
+                                    <div class="employees-title">Сотрудники рабочей группы</div>
                                     <button class="btn-primary add-employees" id="addSubdepartmentEmployees">
                                         <i class="fas fa-user-plus"></i> Добавить сотрудников
                                     </button>
@@ -359,5 +358,5 @@
 <script type="module" src="/java/eventManager.js"></script>
 <script src="/java/currentUserEvents.js"></script>
 <script src="/java/currentUserMeetings.js"></script>
-<script src="/java/calendar.js"></script>
+<script type="module" src="/java/calendar.js"></script>
 </html>
