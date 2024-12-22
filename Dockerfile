@@ -1,10 +1,8 @@
-#
-# Build stage
-#
-FROM gradle:latest AS build
+FROM gradle:8.6.0-jdk21-alpine AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
-RUN gradle build
+RUN gradle clean build
+
 
 #
 # Package stage

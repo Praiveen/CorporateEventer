@@ -12,10 +12,8 @@ export class SubDepartmentManager {
         this.submitHandler = null;
 
         if (window.userRoles.includes('DEPARTMENT_MANAGER')) {
-            // Для менеджера отдела показываем блоки сразу
             this.loadManagerDepartment();
         } else if (parentDepartmentId) {
-            // Для директора инициализируем с переданным ID отдела
             this.initialize();
         }
     }
@@ -53,7 +51,6 @@ export class SubDepartmentManager {
             const department = await response.json();
             this.parentDepartmentId = department.id;
             
-            // Показываем блоки для менеджера отдела
             const createBlock = document.querySelector('.create-subdepartment-block');
             const listBlock = document.querySelector('.subdepartments-list-block');
             if (createBlock) createBlock.style.display = 'block';

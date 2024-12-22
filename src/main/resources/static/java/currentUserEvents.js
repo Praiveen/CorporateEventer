@@ -11,7 +11,6 @@ class CurrentUserEvents {
             const events = await response.json();
             this.renderEvents(events);
             
-            // Добавляем события в календарь
             this.updateCalendarEvents(events);
         } catch (error) {
             console.error('Error loading events:', error);

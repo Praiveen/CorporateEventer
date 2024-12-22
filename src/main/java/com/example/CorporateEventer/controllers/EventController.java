@@ -16,17 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.CorporateEventer.entities.Company;
 import com.example.CorporateEventer.entities.Department;
 import com.example.CorporateEventer.entities.Event;
 import com.example.CorporateEventer.entities.Meeting;
 import com.example.CorporateEventer.entities.Notification;
 import com.example.CorporateEventer.entities.SubDepartment;
 import com.example.CorporateEventer.entities.User;
-import com.example.CorporateEventer.services.CompanyService;
 import com.example.CorporateEventer.services.DepartmentService;
 import com.example.CorporateEventer.services.EventService;
 import com.example.CorporateEventer.services.MeetingService;
@@ -40,9 +37,6 @@ public class EventController {
 
     @Autowired
     private UserService userService;
-    
-    @Autowired
-    private CompanyService companyService;
     
     @Autowired
     private DepartmentService departmentService;
@@ -148,7 +142,7 @@ public class EventController {
             } 
             else if ("subdepartment".equals(type)) {
                 SubDepartment subDept = subDepartmentService.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Подотдел не найден"));
+                    .orElseThrow(() -> new RuntimeException("Рабочая группа не найдена"));
                 participants.addAll(subDept.getUsers());
                 if (subDept.getManager() != null) {
                     participants.add(subDept.getManager());
@@ -253,7 +247,7 @@ public class EventController {
             } 
             else if ("subdepartment".equals(type)) {
                 SubDepartment subDept = subDepartmentService.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Подотдел не найден"));
+                    .orElseThrow(() -> new RuntimeException("Рабочая группа не найдена"));
                 participants.addAll(subDept.getUsers());
                 if (subDept.getManager() != null) {
                     participants.add(subDept.getManager());

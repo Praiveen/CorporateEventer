@@ -55,40 +55,6 @@ public class AuthenticationController {
         );
     }
 
-
-    // @PostMapping(value = "/regSave", consumes = "application/x-www-form-urlencoded")
-    // public String addNewUser(@ModelAttribute("userReg") @Valid User user, BindingResult result, Model model) {
-    //     if (result.hasErrors()) {
-    //         return "register";
-    //     }
-    //     if (!user.getPassword().equals(user.getPasswordConfirm())) {
-    //         model.addAttribute("Message", "Пароли не совпадают");
-    //         System.out.println("pass");
-    //         return "register";
-    //     }
-    //     if (user.getPassword().length() < 5) {
-    //         model.addAttribute("Message", "Пароль должен содержать минимум 5 символов");
-    //         return "register";
-    //     }
-    //     if (!userService.saveUser(user, "new")) {
-    //         model.addAttribute("Message", "Пользователь с такой почтой уже зарегестрирован");
-    //         return "register";
-    //     }
-    //     model.addAttribute("RegFull", "Аккаунт зарегестрирован, теперь можно в него войти!");
-    //     return "register";
-    // }
-
-    // @PostMapping("/login")
-    // public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-    //     User authenticatedUser = authenticationService.authenticate(loginUserDto);
-
-    //     String jwtToken = jwtService.generateToken(authenticatedUser);
-
-    //     LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
-
-    //     return ResponseEntity.ok(loginResponse);
-    // }
-
     /*
      * обработка авторизации
      */

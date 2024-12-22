@@ -35,7 +35,6 @@ import com.example.CorporateEventer.services.NotificationService;
 import com.example.CorporateEventer.services.RoleService;
 import com.example.CorporateEventer.services.SubDepartmentService;
 import com.example.CorporateEventer.services.UserService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RequestMapping("/dashboard")
@@ -243,12 +242,12 @@ public class DashboardController {
             Notification notification = notificationService.findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Уведомление не найдено"));
             if (notification.isCompleted()) {
-                return ResponseEntity.badRequest().body(new ResponseDto("Заявка уже обработа��а", true));
+                return ResponseEntity.badRequest().body(new ResponseDto("Заявка уже обработана", true));
             }
             notification.setCompleted(true);
             notificationService.save(notification);
             
-            return ResponseEntity.ok(new ResponseDto("Уведомление помечено проч��танным", true));
+            return ResponseEntity.ok(new ResponseDto("Уведомление помечено прочитанным", true));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ResponseDto("Ошибка при отклонении заявки: " + e.getMessage(), true));
         }
@@ -495,7 +494,7 @@ public class DashboardController {
             
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Ошибка при создании подотдела: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Ошибка при создании рабочей группы: " + e.getMessage());
         }
     }
 
