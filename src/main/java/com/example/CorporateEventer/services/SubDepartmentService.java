@@ -1,6 +1,5 @@
 package com.example.CorporateEventer.services;
 
-import com.example.CorporateEventer.entities.Department;
 import com.example.CorporateEventer.entities.SubDepartment;
 import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.repositories.SubDepartmentRepository;

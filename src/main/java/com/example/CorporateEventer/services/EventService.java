@@ -4,8 +4,10 @@ import com.example.CorporateEventer.entities.Event;
 import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +35,24 @@ public class EventService {
 
     public List<Event> findByParticipant(User participant) {
         return eventRepository.findByParticipantsContaining(participant);
+    }
+
+    public List<Event> findByParticipantOrCreator(User user) {
+        return eventRepository.findByParticipantOrCreatedBy(user);
+    }
+    
+
+    @Scheduled(fixedRate = 3600000)
+    public void updateEventStatuses() {
+        LocalDateTime now = LocalDateTime.now();
+        
+        List<Event> events = eventRepository.findByStatus(Event.STATUS_PLANNED);
+        
+        for (Event event : events) {
+            if (event.getEndTime().isBefore(now)) {
+                event.setStatus(Event.STATUS_COMPLETED);
+                eventRepository.save(event);
+            }
+        }
     }
 } 

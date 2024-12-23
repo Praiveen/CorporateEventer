@@ -1,6 +1,26 @@
 class CurrentUserEvents {
     constructor() {
         this.loadUserEvents();
+        this.initializeEventListeners();
+    }
+
+
+    initializeEventListeners() {
+        document.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('btn-delete-event')) {
+                const eventId = e.target.dataset.eventId;
+                if (confirm('Вы уверены, что хотите удалить это событие?')) {
+                    await this.deleteEvent(eventId);
+                }
+            }
+
+            if (e.target.classList.contains('btn-complete-event')) {
+                const eventId = e.target.dataset.eventId;
+                if (confirm('Вы уверены, что хотите завершить это событие?')) {
+                    await this.completeEvent(eventId);
+                }
+            }
+        });
     }
 
     async loadUserEvents() {
@@ -18,7 +38,8 @@ class CurrentUserEvents {
     }
 
     updateCalendarEvents(events) {
-        const calendarTasks = window.calendarTasks || {};
+        window.calendarTasks = {};
+        const calendarTasks = window.calendarTasks;
         
         events.currentEvents.forEach(event => {
             const date = new Date(event.startTime);
@@ -33,8 +54,6 @@ class CurrentUserEvents {
             });
         });
         
-        window.calendarTasks = calendarTasks;
-        
         if (window.refreshCalendar) {
             window.refreshCalendar();
         }
@@ -46,7 +65,7 @@ class CurrentUserEvents {
         
         if (currentEventsContainer) {
             currentEventsContainer.innerHTML = events.currentEvents.map(event => `
-                <div class="event-card">
+                <div class="event-card ${event.isCreator ? 'creator-event' : ''}">
                     <h3>${event.title || 'NULL'}</h3>
                     <p>${event.description || 'Нет описания'}</p>
                     <div class="event-details">
@@ -63,13 +82,22 @@ class CurrentUserEvents {
                             ${event.location || 'Место не указано'}
                         </span>
                     </div>
-                    <div class="event-status ${event.status.toLowerCase()}">
-                        ${event.status}
-                    </div>
+                    
+                    <div class="event-status ${event.status.toLowerCase()}">${event.status}</div>
                     <div class="event-creator">
                         <i class="fas fa-user"></i>
-                        Создал: ${event.createdBy || 'Система'}
+                        ${event.isCreator ? 'Вы создатель' : `Создал: ${event.createdBy}`}
                     </div>
+                    ${event.isCreator ? `
+                        <div class="creator-actions">
+                            <button class="btn-complete-event" data-event-id="${event.eventId}">
+                                <i class="fas fa-check"></i> Завершить
+                            </button>
+                            <button class="btn-delete-event" data-event-id="${event.eventId}">
+                                <i class="fas fa-trash"></i> Удалить
+                            </button>
+                        </div>
+                    ` : ''}
                 </div>
             `).join('');
         }
@@ -93,9 +121,10 @@ class CurrentUserEvents {
                             ${event.location || 'Место не указано'}
                         </span>
                     </div>
+                    <div class="event-status ${event.status.toLowerCase()}">${event.status}</div>
                     <div class="event-creator">
                         <i class="fas fa-user"></i>
-                        Создал: ${event.createdBy || 'Система'}
+                        ${event.isCreator ? 'Вы создатель' : `Создал: ${event.createdBy}`}
                     </div>
                 </div>
             `).join('');
@@ -110,6 +139,43 @@ class CurrentUserEvents {
     formatTime(dateString) {
         const date = new Date(dateString);
         return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    }
+
+
+    async deleteEvent(eventId) {
+        try {
+            const response = await fetch(`/event/delete-event/${eventId}`, {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error);
+            }
+
+            this.loadUserEvents();
+        } catch (error) {
+            console.error('Error deleting event:', error);
+            alert('Ошибка при удалении события: ' + error.message);
+        }
+    }
+
+    async completeEvent(eventId) {
+        try {
+            const response = await fetch(`/event/complete-event/${eventId}`, {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error);
+            }
+
+            this.loadUserEvents();
+        } catch (error) {
+            console.error('Error completing event:', error);
+            alert('Ошибка при завершении события: ' + error.message);
+        }
     }
 }
 

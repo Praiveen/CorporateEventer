@@ -4,7 +4,6 @@ package com.example.CorporateEventer.controllers;
 import com.example.CorporateEventer.entities.*;
 import com.example.CorporateEventer.services.*;
 
-import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

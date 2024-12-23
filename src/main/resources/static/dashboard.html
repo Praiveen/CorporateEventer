@@ -53,6 +53,7 @@
                 <h2>Текущие события</h2>
                 <div class="current-events">
                 </div>
+                <h2>Прошедшие события</h2>  
                 <div class="past-events">
                 </div>
             </section>
@@ -60,7 +61,7 @@
                 <h2>Текущие встречи</h2>
                 <div class="current-meetings">
                 </div>
-        
+                <h2>Прошедшие встречи</h2>  
                 <div class="past-meetings">
                 </div>
             </section>
@@ -199,7 +200,7 @@
                             </form>
                         </div>
             
-                        <div class="departments-list-block"
+                        <div class="departments-list-block overflow-auto"
                         th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0}">
                             <div class="block-header">
                                 <h3>Существующие отделы</h3>
@@ -236,7 +237,7 @@
                             </div>
                         </div>
                         
-                        <div class="subdepartments-list-block" style="display: none;"
+                        <div class="subdepartments-list-block overflow-auto" style="display: none;"
                         th:if="${#authentication.principal.roles.?[name == 'DIRECTOR']?.size() > 0 or 
                                 #authentication.principal.roles.?[name == 'DEPARTMENT_MANAGER']?.size() > 0}">
                             <div class="block-header">
@@ -262,7 +263,7 @@
                                     </button>
                                 </div>
                                 
-                                <div class="employee-drag-area" id="departmentEmployeesList">
+                                <div class="employee-drag-area overflow-auto" id="departmentEmployeesList">
                                 </div>
                             </div>
                         </div>
@@ -284,7 +285,7 @@
                                     </button>
                                 </div>
                                 
-                                <div class="employee-drag-area" id="subdepartmentEmployeesList">
+                                <div class="employee-drag-area overflow-auto" id="subdepartmentEmployeesList">
                                 </div>
                             </div>
                         </div>

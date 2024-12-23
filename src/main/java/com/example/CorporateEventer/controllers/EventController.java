@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -128,7 +129,7 @@ public class EventController {
             User currentUser = (User) authentication.getPrincipal();
             
             event.setCreatedBy(currentUser);
-            event.setStatus("PLANNED");
+            event.setStatus(Event.STATUS_PLANNED);
             List<User> participants = new ArrayList<>();
             System.out.println(event);
             
@@ -174,12 +175,11 @@ public class EventController {
             Authentication authentication = userService.userInfoFromSecurity();
             User currentUser = (User) authentication.getPrincipal();
             
-            LocalDateTime now = LocalDateTime.now();
-            List<Event> allEvents = eventService.findByParticipant(currentUser);
+            List<Event> allEvents = eventService.findByParticipantOrCreator(currentUser);
             
             List<Map<String, Object>> currentEvents = allEvents.stream()
-                .filter(event -> event.getEndTime().isAfter(now))
-                .sorted(Comparator.comparing(Event::getStartTime))
+            .filter(event -> event.getStatus().equals(Event.STATUS_PLANNED))
+            .sorted(Comparator.comparing(Event::getStartTime))
                 .map(event -> {
                     Map<String, Object> dto = new HashMap<>();
                     dto.put("eventId", event.getEventId());
@@ -190,12 +190,15 @@ public class EventController {
                     dto.put("location", event.getLocation());
                     dto.put("status", event.getStatus());
                     dto.put("createdBy", event.getCreatedBy().getFirstName() + " " + event.getCreatedBy().getLastName());
+
+                    dto.put("isCreator", event.getCreatedBy().getUserId().equals(currentUser.getUserId()));
                     return dto;
                 })
                 .collect(Collectors.toList());
                 
-            List<Map<String, Object>> pastEvents = allEvents.stream()
-                .filter(event -> event.getEndTime().isBefore(now))
+                List<Map<String, Object>> pastEvents = allEvents.stream()
+                .filter(event -> event.getStatus().equals(Event.STATUS_COMPLETED) || 
+                               event.getStatus().equals(Event.STATUS_CANCELLED))
                 .sorted(Comparator.comparing(Event::getStartTime).reversed())
                 .map(event -> {
                     Map<String, Object> dto = new HashMap<>();
@@ -207,6 +210,8 @@ public class EventController {
                     dto.put("location", event.getLocation());
                     dto.put("status", event.getStatus());
                     dto.put("createdBy", event.getCreatedBy().getFirstName() + " " + event.getCreatedBy().getLastName());
+
+                    dto.put("isCreator", event.getCreatedBy().getUserId().equals(currentUser.getUserId()));
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -232,7 +237,7 @@ public class EventController {
             User currentUser = (User) authentication.getPrincipal();
             
             meeting.setOrganizer(currentUser);
-            meeting.setStatus("PLANNED");
+            meeting.setStatus(Meeting.STATUS_PLANNED);
             
             List<User> participants = new ArrayList<>();
             System.out.println(meeting);
@@ -284,12 +289,11 @@ public class EventController {
             Authentication authentication = userService.userInfoFromSecurity();
             User currentUser = (User) authentication.getPrincipal();
             
-            LocalDateTime now = LocalDateTime.now();
-            List<Meeting> allMeetings = meetingService.findByParticipant(currentUser);
+            List<Meeting> allMeetings = meetingService.findByParticipantOrOrganizer(currentUser);
             
             List<Map<String, Object>> currentMeetings = allMeetings.stream()
-                .filter(meeting -> meeting.getEndTime().isAfter(now))
-                .sorted(Comparator.comparing(Meeting::getStartTime))
+            .filter(meeting -> meeting.getStatus().equals(Meeting.STATUS_PLANNED))
+            .sorted(Comparator.comparing(Meeting::getStartTime))
                 .map(meeting -> {
                     Map<String, Object> dto = new HashMap<>();
                     dto.put("meetingId", meeting.getMeetingId());
@@ -300,12 +304,15 @@ public class EventController {
                     // dto.put("location", meeting.getLocation());
                     dto.put("status", meeting.getStatus());
                     dto.put("createdBy", meeting.getOrganizer().getFirstName() + " " + meeting.getOrganizer().getLastName());
+
+                    dto.put("isOrganizer", meeting.getOrganizer().getUserId().equals(currentUser.getUserId()));
                     return dto;
                 })
                 .collect(Collectors.toList());
                 
-            List<Map<String, Object>> pastMeetings = allMeetings.stream()
-                .filter(meeting -> meeting.getEndTime().isBefore(now))
+                List<Map<String, Object>> pastMeetings = allMeetings.stream()
+                .filter(meeting -> meeting.getStatus().equals(Meeting.STATUS_COMPLETED) || 
+                                 meeting.getStatus().equals(Meeting.STATUS_CANCELLED))
                 .sorted(Comparator.comparing(Meeting::getStartTime).reversed())
                 .map(meeting -> {
                     Map<String, Object> dto = new HashMap<>();
@@ -317,6 +324,8 @@ public class EventController {
                     // dto.put("location", meeting.getLocation());
                     dto.put("status", meeting.getStatus());
                     dto.put("createdBy", meeting.getOrganizer().getFirstName() + " " + meeting.getOrganizer().getLastName());
+
+                    dto.put("isOrganizer", meeting.getOrganizer().getUserId().equals(currentUser.getUserId()));
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -331,5 +340,91 @@ public class EventController {
         }
     }
 
+
+    @PostMapping("/delete-event/{id}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
+        try {
+            Authentication authentication = userService.userInfoFromSecurity();
+            User currentUser = (User) authentication.getPrincipal();
+            
+            Event event = eventService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Событие не найдено"));
+                
+            if (!event.getCreatedBy().getUserId().equals(currentUser.getUserId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Только создатель может удалить событие");
+            }
+            
+            eventService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ошибка при удалении события: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/delete-meeting/{id}")
+    public ResponseEntity<?> deleteMeeting(@PathVariable Long id) {
+        try {
+            Authentication authentication = userService.userInfoFromSecurity();
+            User currentUser = (User) authentication.getPrincipal();
+            
+            Meeting meeting = meetingService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Мероприятие не найдено"));
+                
+            if (!meeting.getOrganizer().getUserId().equals(currentUser.getUserId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Только организатор может удалить мероприятие");
+            }
+            
+            meetingService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ошибка при удалении мероприятия: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/complete-event/{id}")
+    public ResponseEntity<?> completeEvent(@PathVariable Long id) {
+        try {
+            Authentication authentication = userService.userInfoFromSecurity();
+            User currentUser = (User) authentication.getPrincipal();
+            
+            Event event = eventService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Событие не найдено"));
+                
+            if (!event.getCreatedBy().getUserId().equals(currentUser.getUserId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Только создатель может завершить событие");
+            }
+            
+            event.setStatus(Event.STATUS_COMPLETED);
+            eventService.save(event);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body("Ошибка при завершении события: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/complete-meeting/{id}")
+    public ResponseEntity<?> completeMeeting(@PathVariable Long id) {
+        try {
+            Authentication authentication = userService.userInfoFromSecurity();
+            User currentUser = (User) authentication.getPrincipal();
+            
+            Meeting meeting = meetingService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Мероприятие не найдено"));
+                
+            if (!meeting.getOrganizer().getUserId().equals(currentUser.getUserId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Только организатор может завершить мероприятие");
+            }
+            
+            meeting.setStatus(Meeting.STATUS_COMPLETED);
+            meetingService.save(meeting);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body("Ошибка при завершении мероприятия: " + e.getMessage());
+        }
+    }
 
 }

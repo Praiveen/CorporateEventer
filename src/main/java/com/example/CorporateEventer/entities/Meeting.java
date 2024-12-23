@@ -10,6 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Meeting {
+    public static final String STATUS_PLANNED = "PLANNED";
+    public static final String STATUS_COMPLETED = "COMPLETED";
+    public static final String STATUS_CANCELLED = "CANCELLED";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +30,19 @@ public class Meeting {
 
     @ManyToMany
     private List<User> participants;
+
+
+
+    public boolean isCompleted() {
+        return STATUS_COMPLETED.equals(this.status);
+    }
+    
+    public boolean isPlanned() {
+        return STATUS_PLANNED.equals(this.status);
+    }
+    
+    public boolean isCancelled() {
+        return STATUS_CANCELLED.equals(this.status);
+    }
 }
 

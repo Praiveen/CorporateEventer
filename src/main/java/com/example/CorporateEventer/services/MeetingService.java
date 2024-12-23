@@ -4,8 +4,10 @@ import com.example.CorporateEventer.entities.Meeting;
 import com.example.CorporateEventer.entities.User;
 import com.example.CorporateEventer.repositories.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +35,24 @@ public class MeetingService {
 
     public List<Meeting> findByParticipant(User participant) {
         return meetingRepository.findByParticipantsContaining(participant);
+    }
+
+    public List<Meeting> findByParticipantOrOrganizer(User user) {
+        return meetingRepository.findByParticipantOrOrganizer(user);
+    }
+
+
+    @Scheduled(fixedRate = 3600000)
+    public void updateMeetingStatuses() {
+        LocalDateTime now = LocalDateTime.now();
+        
+        List<Meeting> meetings = meetingRepository.findByStatus("PLANNED");
+        
+        for (Meeting meeting : meetings) {
+            if (meeting.getEndTime().isBefore(now)) {
+                meeting.setStatus("COMPLETED");
+                meetingRepository.save(meeting);
+            }
+        }
     }
 } 

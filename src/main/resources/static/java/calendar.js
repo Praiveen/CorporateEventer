@@ -9,6 +9,7 @@ let currentDate = new Date();
 let tasks = {};
 
 window.refreshCalendar = function () {
+    tasks = {};
     tasks = window.calendarTasks || {};
     renderCalendar(currentDate);
     console.log(tasks);
@@ -21,12 +22,10 @@ function renderCalendar(date) {
     const lastDay = new Date(year, month + 1, 0).getDate();
     monthYear.textContent = `${date.toLocaleString("ru", { month: "long" })} ${year}`;
     daysContainer.innerHTML = "";
-    // Пустые дни перед началом месяца
     for (let i = 1; i < firstDayIndex; i++) {
         const emptyDay = document.createElement("div");
         daysContainer.appendChild(emptyDay);
     }
-    // Дни месяца
     for (let day = 1; day <= lastDay; day++) {
         const dayElement = document.createElement("div");
         dayElement.classList.add("day");

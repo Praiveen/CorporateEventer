@@ -11,6 +11,10 @@ import java.util.List;
 @Entity
 public class Event {
 
+    public static final String STATUS_PLANNED = "PLANNED";
+    public static final String STATUS_COMPLETED = "COMPLETED";
+    public static final String STATUS_CANCELLED = "CANCELLED";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId;
@@ -33,5 +37,18 @@ public class Event {
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> participants;
+
+
+    public boolean isCompleted() {
+        return STATUS_COMPLETED.equals(this.status);
+    }
+    
+    public boolean isPlanned() {
+        return STATUS_PLANNED.equals(this.status);
+    }
+    
+    public boolean isCancelled() {
+        return STATUS_CANCELLED.equals(this.status);
+    }
 }
 
