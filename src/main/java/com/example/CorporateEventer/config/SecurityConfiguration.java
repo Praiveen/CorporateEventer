@@ -31,14 +31,20 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/register", "/login", "/register.html", "/login.html").permitAll()
-                .requestMatchers("/profile").authenticated()
-                .requestMatchers("/dashboard").authenticated()
-                .requestMatchers("/css/**", "/js/**").permitAll()
-                .requestMatchers("/**").permitAll()
-                .requestMatchers("/").permitAll()
-                .anyRequest().permitAll()
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(requests -> requests
+                    .requestMatchers(
+                        "/",
+                        "/register",
+                        "/register.html",
+                        "/login",
+                        "/login.html",
+                        "/css/**",
+                        "/js/**",
+                        "/java/**",
+                        "/images/**"
+                ).permitAll()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
