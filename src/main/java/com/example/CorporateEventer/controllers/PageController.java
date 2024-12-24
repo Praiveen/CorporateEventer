@@ -32,17 +32,22 @@ public class PageController {
     //     return "index";
     // }
 
-    @GetMapping("/register")
-    public String registration() {
-        if (userService.userInfoFromSecurity().getPrincipal().equals("anonymousUser")) {
-            return "/register";
-        }
-        return "redirect:/dashboard";
-    }
+    // @GetMapping("/register")
+    // public String registration() {
+    //     if (userService.userInfoFromSecurity().getPrincipal().equals("anonymousUser")) {
+    //         return "/register";
+    //     }
+    //     return "redirect:/dashboard";
+    // }
 
-    @GetMapping("/signup")
-    public String signup() {
-        return "/signup";
+    // @GetMapping("/signup")
+    // public String signup() {
+    //     return "/signup";
+    // }
+
+    @GetMapping("/rega")
+    public String rega() {
+        return "rega";
     }
 
 
