@@ -13,4 +13,10 @@ FROM openjdk:21
 WORKDIR /app
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/demo.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","demo.jar"]
+
+ENV DATABASE_URL=''
+ENV DATABASE_USERNAME=''
+ENV DATABASE_PASSWORD=''
+ENV JWT_SECRET_KEY=''
+
+ENTRYPOINT ["java", "-jar", "demo.jar"]

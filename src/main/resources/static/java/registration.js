@@ -19,6 +19,7 @@ form.addEventListener('submit', async (event) => {
             body: JSON.stringify(data),
         });
 
+        const responseData = await response.json();
         if (!response.ok) {
             document.querySelector('.alert').innerText = responseData.message; 
         } else {
