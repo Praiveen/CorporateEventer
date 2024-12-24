@@ -31,8 +31,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/register", "/login", "/register.html", "/login.html").permitAll()
                 .requestMatchers("/profile").authenticated()
