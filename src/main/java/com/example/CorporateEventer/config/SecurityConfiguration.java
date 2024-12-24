@@ -33,6 +33,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/signup", "/login", "/signup.html", "/login.html").permitAll()
+                .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/profile").authenticated()
                 .requestMatchers("/dashboard").authenticated()
                 .requestMatchers("/css/**", "/js/**").permitAll()
