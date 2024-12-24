@@ -40,6 +40,11 @@ public class PageController {
         return "redirect:/dashboard";
     }
 
+    @GetMapping("/signup")
+    public String signup() {
+        return "/signup";
+    }
+
 
 
     @GetMapping("/login")
