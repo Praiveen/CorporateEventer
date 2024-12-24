@@ -32,23 +32,14 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(requests -> requests
-                    .requestMatchers(
-                        "/",
-                        "/register",
-                        "/register.html",
-                        "/rega",
-                        "/login",
-                        "/login.html",
-                        "/auth/**",
-                        "/css/**",
-                        "/js/**",
-                        "/java/**",
-                        "/images/**"
-                    ).permitAll()
-                    .requestMatchers("/profile", "/dashboard").authenticated()
-                    .anyRequest().authenticated()
+                .cors(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((requests) -> requests
+                                .requestMatchers("/login").anonymous()
+                                .requestMatchers("/register").anonymous()
+                                .requestMatchers("/profile").authenticated()
+                                .requestMatchers("/css/**", "/js/**").permitAll()
+                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/").permitAll()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")

@@ -66,13 +66,14 @@ public class DashboardController {
             
             currentUser = userService.findById(currentUser.getUserId().intValue())
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
-    
+            System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddd");
             company.setUsers(new ArrayList<>());
             company.setDepartments(new ArrayList<>());
     
             company.setDirector(currentUser);
             Company savedCompany = companyService.save(company);
             roleService.changeUserRole(currentUser.getUserId(), Role.USER, Role.DIRECTOR);
+            System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddd");
 
             currentUser.setCompany(savedCompany);
             userService.save(currentUser);
