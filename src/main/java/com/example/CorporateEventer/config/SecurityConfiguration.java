@@ -37,6 +37,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/login").anonymous()
                                 .requestMatchers("/register").anonymous()
                                 .requestMatchers("/profile").authenticated()
+                                .requestMatchers("/dashboard").authenticated()
                                 .requestMatchers("/css/**", "/java/**").permitAll()
                                 // .requestMatchers("/java/**").authenticated()
                                 .requestMatchers("/**").permitAll()
